@@ -1,0 +1,141 @@
+name: Flutter
+
+on:
+  push:
+    paths: ["app/**", ".github/workflows/flutter.yml"]
+  pull_request:
+    paths: ["app/**", ".github/workflows/flutter.yml"]
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: app
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Зависимости
+        run: flutter pub get
+
+      - name: Кодогенерация (riverpod, freezed, json)
+        run: dart run build_runner build
+
+      - name: Формат
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Анализ
+        run: flutter analyze
+
+      - name: Тесты
+        run: flutter test
+
+  apk-dev:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+      - run: dart run build_runner build
+
+      # Debug-подпись, только для проверки на телефоне. Release-подпись — позже, через секреты.
+      - name: Сборка dev APK
+        run: flutter build apk --debug --flavor dev -t lib/main_dev.dart
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: activbank-qr-dev-apk
+          path: app/build/app/outputs/flutter-apk/app-dev-debug.apk
+
+  # Размер релиза: arm64 — то, что Google Play отдаст большинству телефонов из AAB.
+  apk-size:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+      - run: dart run build_runner build
+
+      - name: Release APK (arm64) с анализом размера
+        run: |
+          mkdir -p build
+          flutter build apk --release --flavor prod -t lib/main_prod.dart \
+            --target-platform android-arm64 --analyze-size \
+            --code-size-directory=build/size | tee build/size.log
+
+      - name: Отчёт в сводку запуска
+        run: |
+          {
+            echo '## Размер release APK (arm64)'
+            echo '```'
+            ls -l build/app/outputs/flutter-apk/*.apk
+            echo
+            tail -n 80 build/size.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: activbank-qr-size-report
+          path: |
+            app/build/size/
+            app/build/size.log
+
+  # Проверка, что iOS собирается. Подписи нет: dev — под симулятор, prod — release без подписи.
+  ios:
+    needs: check
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+      - run: dart run build_runner build
+
+      - name: Сборка dev под симулятор
+        run: flutter build ios --simulator --debug --flavor dev -t lib/main_dev.dart
+
+      - name: Сборка prod release без подписи
+        run: flutter build ios --release --no-codesign --flavor prod -t lib/main_prod.dart
+
+      # ditto сохраняет права на исполняемый файл — иначе .app не запустится в симуляторе.
+      - name: Упаковка .app для симулятора
+        run: ditto -c -k --keepParent build/ios/iphonesimulator/Runner.app activbank-qr-dev-simulator.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: activbank-qr-dev-simulator
+          path: app/activbank-qr-dev-simulator.zip
