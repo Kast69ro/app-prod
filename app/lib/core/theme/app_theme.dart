@@ -40,9 +40,11 @@ abstract final class AppTheme {
       dialogTheme: DialogThemeData(backgroundColor: c.surface),
       // Календарь периода в истории. В шапке «Дата начала» у Flutter
       // не сжимается — со стандартными 24 px и крупным шрифтом вылезает.
+      // 16 px: на экране 320 px при шрифте 1,3× влезают и длинные месяцы
+      // («1 нояб. – », «1 сент. – »), и период через год с «2025 г.».
       datePickerTheme: const DatePickerThemeData(
         rangePickerHeaderHeadlineStyle: TextStyle(
-          fontSize: 18,
+          fontSize: 16,
           fontWeight: FontWeight.w600,
         ),
       ),
