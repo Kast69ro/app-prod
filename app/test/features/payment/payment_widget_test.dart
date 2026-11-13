@@ -64,7 +64,7 @@ void main() {
     expect(find.text('Душанбе Сити Банк').hitTestable(), findsOneWidget);
     expect(find.text('12345').hitTestable(), findsOneWidget); // ID терминала
     expect(find.text('ООО Ромашка').hitTestable(), findsOneWidget);
-    expect(find.text('Возврат платежа'), findsOneWidget);
+    expect(find.text('Возврат платежа'), findsNothing);
     expect(find.text('Поделиться чеком'), findsOneWidget);
 
     await tester.tap(find.text('← Назад'));
@@ -85,7 +85,7 @@ void main() {
     expect(inSheet(find.text('Плательщик')), findsOneWidget);
     expect(inSheet(find.text('КУРБОНОВ Мухаммадшариф')), findsOneWidget);
     expect(inSheet(find.text('ActivBank')), findsOneWidget);
-    expect(inSheet(find.text('Внутри банка')), findsOneWidget);
+    expect(inSheet(find.text('Внутри банка')), findsNothing);
     // Имя человека не подписываем как банк.
     expect(inSheet(find.text('Банк-отправитель')), findsNothing);
     expect(find.text('Поделиться чеком'), findsOneWidget);

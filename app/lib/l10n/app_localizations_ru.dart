@@ -300,15 +300,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get paymentOurBank => 'ActivBank';
 
   @override
-  String get paymentTransfer => 'Перевод';
-
-  @override
-  String get paymentTransferInternal => 'Внутри банка';
-
-  @override
-  String get historyInternalTag => 'ActivBank · внутри банка';
-
-  @override
   String get reportSender => 'Банк / Плательщик';
 
   @override
@@ -319,9 +310,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get paymentTrailScanned => 'Клиент отсканировал';
-
-  @override
-  String get paymentRefund => 'Возврат платежа';
 
   @override
   String get paymentShare => 'Поделиться чеком';

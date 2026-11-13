@@ -616,24 +616,6 @@ abstract class AppLocalizations {
   /// **'ActivBank'**
   String get paymentOurBank;
 
-  /// No description provided for @paymentTransfer.
-  ///
-  /// In ru, this message translates to:
-  /// **'Перевод'**
-  String get paymentTransfer;
-
-  /// No description provided for @paymentTransferInternal.
-  ///
-  /// In ru, this message translates to:
-  /// **'Внутри банка'**
-  String get paymentTransferInternal;
-
-  /// No description provided for @historyInternalTag.
-  ///
-  /// In ru, this message translates to:
-  /// **'ActivBank · внутри банка'**
-  String get historyInternalTag;
-
   /// No description provided for @reportSender.
   ///
   /// In ru, this message translates to:
@@ -657,12 +639,6 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Клиент отсканировал'**
   String get paymentTrailScanned;
-
-  /// No description provided for @paymentRefund.
-  ///
-  /// In ru, this message translates to:
-  /// **'Возврат платежа'**
-  String get paymentRefund;
 
   /// No description provided for @paymentShare.
   ///

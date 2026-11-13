@@ -98,8 +98,8 @@ void main() {
     await openHistory(tester);
 
     expect(find.text('КУРБОНОВ Мухаммадшариф'), findsOneWidget);
-    // Метка только у внутрибанковского, у межбанка — название банка.
-    expect(find.text('ActivBank · внутри банка'), findsOneWidget);
+    // Подписи «внутри банка» нет: у клиента ActivBank — имя, у межбанка — банк.
+    expect(find.textContaining('внутри банка'), findsNothing);
     expect(find.text('Душанбе Сити Банк'), findsOneWidget);
   });
 

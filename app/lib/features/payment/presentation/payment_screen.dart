@@ -109,7 +109,6 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                     if (p.isInternal) ...[
                       InfoRow(l.paymentPayer, p.sender),
                       InfoRow(l.receiptBank, l.paymentOurBank),
-                      InfoRow(l.paymentTransfer, l.paymentTransferInternal),
                     ] else
                       InfoRow(l.paymentBank, p.sender),
                     // Как в прототипе: ID терминала, иначе название.
@@ -127,23 +126,24 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
           ),
         ],
       ),
-      bottom: _Actions(
-        children: [
-          RefundButton(label: l.paymentRefund),
-          if (p.status == PaymentStatus.success)
-            ShareReceiptButton(
-              key: _shareKey,
-              label: switch (_share) {
-                _Share.idle => l.paymentShare,
-                _Share.busy => l.paymentSharing,
-                _Share.failed => l.paymentShareError,
-              },
-              busy: _share == _Share.busy,
-              failed: _share == _Share.failed,
-              onTap: () => _shareReceipt(receipt),
-            ),
-        ],
-      ),
+      // Чек — только по оплаченным, у остальных панели действий нет.
+      bottom: p.status == PaymentStatus.success
+          ? _Actions(
+              children: [
+                ShareReceiptButton(
+                  key: _shareKey,
+                  label: switch (_share) {
+                    _Share.idle => l.paymentShare,
+                    _Share.busy => l.paymentSharing,
+                    _Share.failed => l.paymentShareError,
+                  },
+                  busy: _share == _Share.busy,
+                  failed: _share == _Share.failed,
+                  onTap: () => _shareReceipt(receipt),
+                ),
+              ],
+            )
+          : null,
     );
   }
 }
