@@ -47,7 +47,7 @@ lib/
 ## Flavors
 - `dev`: `http://10.64.20.101:8888` (тестовый, внутренняя сеть банка). http разрешён ТОЛЬКО в dev:
   Android `src/dev/res/xml/network_security_config.xml`, iOS — исключение ATS только в dev-конфигурации.
-- `prod`: HTTPS-домен шлюза в DMZ (уточнить). Без исключений ATS / cleartext, включён certificate pinning.
+- `prod`: `https://qr.activ24.tj:4477` (шлюз, ручки тоже под `/pos`). Без исключений ATS / cleartext, включён certificate pinning.
 - Адрес берётся из `env.dart`, нигде не хардкодится.
 
 ## API (база `/pos`)

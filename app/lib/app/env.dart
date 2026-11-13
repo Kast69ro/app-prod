@@ -26,9 +26,11 @@ class Env {
     apiBaseUrl: 'http://10.64.20.101:8888',
   );
 
-  /// TODO(prod): HTTPS-домен шлюза в DMZ — уточнить у банка.
-  /// Пока пусто: ApiClient отказывает во всех запросах (fail-closed).
-  static const prod = Env(flavor: Flavor.prod, apiBaseUrl: '');
+  /// Шлюз для мобильного приложения (HTTPS).
+  static const prod = Env(
+    flavor: Flavor.prod,
+    apiBaseUrl: 'https://qr.activ24.tj:4477',
+  );
 }
 
 /// Переопределяется в `main_dev.dart` / `main_prod.dart`.
