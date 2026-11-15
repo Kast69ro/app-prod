@@ -84,5 +84,12 @@ void main() {
       expect(formatPhoneHidden('931234567'), '+992 93 ··· 67');
       expect(fullPhone('931234567'), '+992931234567');
     });
+
+    test('маскированный номер с бэка', () {
+      expect(formatMaskedPhone('9929*****797'), '+992 9*****797');
+      expect(formatMaskedPhone('+9929*****797'), '+992 9*****797');
+      // Не наш формат — показываем как есть, маску не трогаем.
+      expect(formatMaskedPhone('93*****97'), '93*****97');
+    });
   });
 }

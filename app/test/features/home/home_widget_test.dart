@@ -27,6 +27,11 @@ void main() {
 
     // Телефон уходит в GET-запросы после входа.
     expect(backend.requests, containsAll(['/pos/terminal', '/pos/summary']));
+    // Ручки данных — с токеном из otp/verify, ручки входа — без него.
+    for (var i = 0; i < backend.requests.length; i++) {
+      final isAuth = backend.requests[i].startsWith('/pos/otp/');
+      expect(backend.authHeaders[i], isAuth ? isNull : 'Bearer access-1');
+    }
   });
 
   testWidgets('QR на весь экран и обратно', (tester) async {

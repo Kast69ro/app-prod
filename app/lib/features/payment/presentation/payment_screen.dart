@@ -6,6 +6,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/date_format.dart';
 import '../../../core/utils/money_format.dart';
+import '../../../core/utils/phone_format.dart';
 import '../../../core/widgets/info_card.dart';
 import '../../../core/widgets/sheet_page.dart';
 import '../../../core/widgets/text_link.dart';
@@ -108,6 +109,11 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                     InfoRow(l.paymentTime, at == null ? '—' : formatTime(at)),
                     if (p.isInternal) ...[
                       InfoRow(l.paymentPayer, p.sender),
+                      if (p.senderPhone != null)
+                        InfoRow(
+                          l.paymentPayerPhone,
+                          formatMaskedPhone(p.senderPhone!),
+                        ),
                       InfoRow(l.receiptBank, l.paymentOurBank),
                     ] else
                       InfoRow(l.paymentBank, p.sender),

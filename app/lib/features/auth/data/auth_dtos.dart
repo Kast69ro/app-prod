@@ -16,14 +16,27 @@ abstract class OtpRequestDto with _$OtpRequestDto {
       _$OtpRequestDtoFromJson(json);
 }
 
-/// Ответ `POST /pos/otp/verify`.
+/// Терминал из ответа `POST /pos/otp/verify`.
+@freezed
+abstract class VerifiedTerminalDto with _$VerifiedTerminalDto {
+  const factory VerifiedTerminalDto({
+    @JsonKey(fromJson: _idFromJson) String? terminalId,
+    @Default('') String terminalName,
+    @Default('') String storeName,
+    String? terminalQR,
+  }) = _VerifiedTerminalDto;
+
+  factory VerifiedTerminalDto.fromJson(Map<String, dynamic> json) =>
+      _$VerifiedTerminalDtoFromJson(json);
+}
+
+/// Ответ `POST /pos/otp/verify` без токенов: их разбирает `AuthTokens`,
+/// чтобы токены не попали в сгенерированный `toString`.
 @freezed
 abstract class OtpVerifyDto with _$OtpVerifyDto {
   const factory OtpVerifyDto({
     @Default(true) bool ok,
-    @JsonKey(fromJson: _idFromJson) String? terminalId,
-    @Default('') String terminalName,
-    @Default('') String storeName,
+    @Default(VerifiedTerminalDto()) VerifiedTerminalDto terminal,
   }) = _OtpVerifyDto;
 
   factory OtpVerifyDto.fromJson(Map<String, dynamic> json) =>

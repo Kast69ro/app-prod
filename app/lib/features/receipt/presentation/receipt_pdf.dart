@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/utils/date_format.dart';
 import '../../../core/utils/money_format.dart';
+import '../../../core/utils/phone_format.dart';
 import '../../../core/utils/pdf_kit.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../payment/presentation/payment_status_style.dart';
@@ -44,6 +45,8 @@ class ReceiptPdf {
       (l.paymentTime, at == null ? '—' : formatTime(at)),
       if (p.isInternal) ...[
         (l.paymentPayer, p.sender),
+        if (p.senderPhone != null)
+          (l.paymentPayerPhone, formatMaskedPhone(p.senderPhone!)),
         (l.receiptBank, l.paymentOurBank),
       ] else
         (l.receiptBank, p.sender),

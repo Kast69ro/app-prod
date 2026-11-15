@@ -28,7 +28,8 @@ class PinLockedOut extends PinCheck {
   const PinLockedOut();
 }
 
-/// Код доступа и счётчик неверных попыток (переживает перезапуск).
+/// Код доступа, счётчик неверных попыток (переживает перезапуск)
+/// и отметка «входить по биометрии».
 class PinRepository {
   PinRepository(this._store, {this.hasher = const PinHasher()});
 
@@ -67,6 +68,17 @@ class PinRepository {
     if (failures >= pinMaxAttempts) return const PinLockedOut();
     return PinWrong(pinMaxAttempts - failures);
   }
+
+  /// Вход по Face ID / отпечатку включён для этой сессии.
+  Future<bool> biometricEnabled() async =>
+      await _store.read(SecureKeys.biometric) == '1';
+
+  Future<void> setBiometric({required bool enabled}) => enabled
+      ? _store.write(SecureKeys.biometric, '1')
+      : _store.delete(SecureKeys.biometric);
+
+  /// Владелец подтвердил себя биометрией — неверные вводы кода прощаем.
+  Future<void> resetFailures() => _store.delete(SecureKeys.pinFailures);
 
   Future<int> _failures() async =>
       int.tryParse(await _store.read(SecureKeys.pinFailures) ?? '') ?? 0;

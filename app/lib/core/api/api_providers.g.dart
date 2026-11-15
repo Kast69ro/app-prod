@@ -8,15 +8,18 @@ part of 'api_providers.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Номер терминала текущей сессии (`+992…`). Заполняет auth после входа.
+/// Токены, с которыми сейчас идут запросы. `null` — не вошли или
+/// приложение заблокировано (ждём код). Заполняет `SessionController`.
 
 @ProviderFor(AuthCredentials)
 final authCredentialsProvider = AuthCredentialsProvider._();
 
-/// Номер терминала текущей сессии (`+992…`). Заполняет auth после входа.
+/// Токены, с которыми сейчас идут запросы. `null` — не вошли или
+/// приложение заблокировано (ждём код). Заполняет `SessionController`.
 final class AuthCredentialsProvider
-    extends $NotifierProvider<AuthCredentials, String?> {
-  /// Номер терминала текущей сессии (`+992…`). Заполняет auth после входа.
+    extends $NotifierProvider<AuthCredentials, AuthTokens?> {
+  /// Токены, с которыми сейчас идут запросы. `null` — не вошли или
+  /// приложение заблокировано (ждём код). Заполняет `SessionController`.
   AuthCredentialsProvider._()
     : super(
         from: null,
@@ -36,29 +39,92 @@ final class AuthCredentialsProvider
   AuthCredentials create() => AuthCredentials();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(String? value) {
+  Override overrideWithValue(AuthTokens? value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<String?>(value),
+      providerOverride: $SyncValueProvider<AuthTokens?>(value),
     );
   }
 }
 
-String _$authCredentialsHash() => r'ad56bf965a08613f04901d2e85fb5e59433a8629';
+String _$authCredentialsHash() => r'd41a4a6dbd1ee007bc2c37f1b78849ac5f40dae5';
 
-/// Номер терминала текущей сессии (`+992…`). Заполняет auth после входа.
+/// Токены, с которыми сейчас идут запросы. `null` — не вошли или
+/// приложение заблокировано (ждём код). Заполняет `SessionController`.
 
-abstract class _$AuthCredentials extends $Notifier<String?> {
-  String? build();
+abstract class _$AuthCredentials extends $Notifier<AuthTokens?> {
+  AuthTokens? build();
   @$mustCallSuper
   @override
   WhenComplete runBuild() {
-    final ref = this.ref as $Ref<String?, String?>;
+    final ref = this.ref as $Ref<AuthTokens?, AuthTokens?>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<String?, String?>,
-              String?,
+              AnyNotifier<AuthTokens?, AuthTokens?>,
+              AuthTokens?,
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(ref, build);
+  }
+}
+
+/// Счётчик «refresh отклонён». `SessionController` слушает его и выходит
+/// на вход по SMS. Через событие, чтобы `core/` не зависел от `features/`.
+
+@ProviderFor(SessionExpiry)
+final sessionExpiryProvider = SessionExpiryProvider._();
+
+/// Счётчик «refresh отклонён». `SessionController` слушает его и выходит
+/// на вход по SMS. Через событие, чтобы `core/` не зависел от `features/`.
+final class SessionExpiryProvider
+    extends $NotifierProvider<SessionExpiry, int> {
+  /// Счётчик «refresh отклонён». `SessionController` слушает его и выходит
+  /// на вход по SMS. Через событие, чтобы `core/` не зависел от `features/`.
+  SessionExpiryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'sessionExpiryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$sessionExpiryHash();
+
+  @$internal
+  @override
+  SessionExpiry create() => SessionExpiry();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(int value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<int>(value),
+    );
+  }
+}
+
+String _$sessionExpiryHash() => r'75ffe9c24aa730489ad8931556aeb2a4e04854fb';
+
+/// Счётчик «refresh отклонён». `SessionController` слушает его и выходит
+/// на вход по SMS. Через событие, чтобы `core/` не зависел от `features/`.
+
+abstract class _$SessionExpiry extends $Notifier<int> {
+  int build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<int, int>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<int, int>,
+              int,
               Object?,
               Object?
             >;
@@ -104,7 +170,7 @@ final class DioProvider extends $FunctionalProvider<Dio, Dio, Dio>
   }
 }
 
-String _$dioHash() => r'8b9952c29e3a31d3ebff9fdc0e8a7e0042c71bb5';
+String _$dioHash() => r'a9754bb8cf8b8fb1e6ffce223d0433a638f70fe4';
 
 @ProviderFor(apiClient)
 final apiClientProvider = ApiClientProvider._();

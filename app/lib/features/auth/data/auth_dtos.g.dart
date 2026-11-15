@@ -20,18 +20,32 @@ Map<String, dynamic> _$OtpRequestDtoToJson(_OtpRequestDto instance) =>
       'expires_in': instance.expiresIn,
     };
 
-_OtpVerifyDto _$OtpVerifyDtoFromJson(Map<String, dynamic> json) =>
-    _OtpVerifyDto(
-      ok: json['ok'] as bool? ?? true,
+_VerifiedTerminalDto _$VerifiedTerminalDtoFromJson(Map<String, dynamic> json) =>
+    _VerifiedTerminalDto(
       terminalId: _idFromJson(json['terminalId']),
       terminalName: json['terminalName'] as String? ?? '',
       storeName: json['storeName'] as String? ?? '',
+      terminalQR: json['terminalQR'] as String?,
+    );
+
+Map<String, dynamic> _$VerifiedTerminalDtoToJson(
+  _VerifiedTerminalDto instance,
+) => <String, dynamic>{
+  'terminalId': instance.terminalId,
+  'terminalName': instance.terminalName,
+  'storeName': instance.storeName,
+  'terminalQR': instance.terminalQR,
+};
+
+_OtpVerifyDto _$OtpVerifyDtoFromJson(Map<String, dynamic> json) =>
+    _OtpVerifyDto(
+      ok: json['ok'] as bool? ?? true,
+      terminal: json['terminal'] == null
+          ? const VerifiedTerminalDto()
+          : VerifiedTerminalDto.fromJson(
+              json['terminal'] as Map<String, dynamic>,
+            ),
     );
 
 Map<String, dynamic> _$OtpVerifyDtoToJson(_OtpVerifyDto instance) =>
-    <String, dynamic>{
-      'ok': instance.ok,
-      'terminalId': instance.terminalId,
-      'terminalName': instance.terminalName,
-      'storeName': instance.storeName,
-    };
+    <String, dynamic>{'ok': instance.ok, 'terminal': instance.terminal};

@@ -78,12 +78,20 @@ void main() {
   ) async {
     await openPayment(
       tester,
-      payment(44.55, at, type: 'internal', sender: 'КУРБОНОВ Мухаммадшариф'),
+      payment(
+        44.55,
+        at,
+        type: 'internal',
+        sender: 'КУРБОНОВ Мухаммадшариф',
+        senderPhone: '9929*****797',
+      ),
       size: const Size(390, 844),
     );
 
     expect(inSheet(find.text('Плательщик')), findsOneWidget);
     expect(inSheet(find.text('КУРБОНОВ Мухаммадшариф')), findsOneWidget);
+    expect(inSheet(find.text('Телефон плательщика')), findsOneWidget);
+    expect(inSheet(find.text('+992 9*****797')), findsOneWidget);
     expect(inSheet(find.text('ActivBank')), findsOneWidget);
     expect(inSheet(find.text('Внутри банка')), findsNothing);
     // Имя человека не подписываем как банк.
@@ -101,6 +109,7 @@ void main() {
     expect(inSheet(find.text('Банк-отправитель')), findsOneWidget);
     expect(inSheet(find.text('Душанбе Сити Банк')), findsOneWidget);
     expect(inSheet(find.text('Плательщик')), findsNothing);
+    expect(inSheet(find.text('Телефон плательщика')), findsNothing);
     expect(inSheet(find.text('Внутри банка')), findsNothing);
   });
 

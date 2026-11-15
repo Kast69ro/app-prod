@@ -71,4 +71,22 @@ void main() {
     store.values[SecureKeys.pinRecord] = 'не json';
     expect(await repo.check('1234', phone), isA<PinLockedOut>());
   });
+
+  test('биометрия: включить, выключить', () async {
+    expect(await repo.biometricEnabled(), isFalse);
+    await repo.setBiometric(enabled: true);
+    expect(await repo.biometricEnabled(), isTrue);
+    await repo.setBiometric(enabled: false);
+    expect(await repo.biometricEnabled(), isFalse);
+    expect(store.values.containsKey(SecureKeys.biometric), isFalse);
+  });
+
+  test('resetFailures прощает неверные вводы', () async {
+    await repo.save('1234', phone);
+    await repo.check('0000', phone);
+    await repo.check('0000', phone);
+    await repo.resetFailures();
+    final r = await repo.check('0000', phone);
+    expect((r as PinWrong).attemptsLeft, 4);
+  });
 }

@@ -48,6 +48,7 @@ class Payment {
     required this.status,
     required this.createdAt,
     this.senderBankId,
+    this.senderPhone,
     this.type = PaymentType.external,
   });
 
@@ -56,6 +57,10 @@ class Payment {
   final String sender;
   final PaymentType type;
   final int? senderBankId;
+
+  /// Телефон плательщика, уже замаскированный бэком (`9929*****797`).
+  /// Только для [PaymentType.internal]; `null`, если не прислали.
+  final String? senderPhone;
 
   /// Клиент ActivBank: в [sender] — имя человека, а не банк.
   bool get isInternal => type == PaymentType.internal;
@@ -73,11 +78,19 @@ class Payment {
       other.sender == sender &&
       other.type == type &&
       other.senderBankId == senderBankId &&
+      other.senderPhone == senderPhone &&
       other.amount == amount &&
       other.status == status &&
       other.createdAt == createdAt;
 
   @override
-  int get hashCode =>
-      Object.hash(sender, type, senderBankId, amount, status, createdAt);
+  int get hashCode => Object.hash(
+    sender,
+    type,
+    senderBankId,
+    senderPhone,
+    amount,
+    status,
+    createdAt,
+  );
 }

@@ -41,7 +41,7 @@ final class PinControllerProvider
   }
 }
 
-String _$pinControllerHash() => r'14d2a6c6ac8b846057a10c94223ab989e81de2c9';
+String _$pinControllerHash() => r'5b6511f0ab821bb3faba7c71663511e410929f57';
 
 abstract class _$PinController extends $Notifier<PinState> {
   PinState build();

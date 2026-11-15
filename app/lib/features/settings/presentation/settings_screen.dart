@@ -12,10 +12,12 @@ import '../../../core/widgets/info_card.dart';
 import '../../../core/widgets/text_link.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/presentation/session_controller.dart';
+import '../../pin/presentation/biometric_controller.dart';
 import 'theme_mode_controller.dart';
+import 'widgets/settings_switch_row.dart';
 import 'widgets/theme_selector.dart';
 
-/// Настройки: данные точки, тема, смена кода, выход.
+/// Настройки: данные точки, тема, смена кода, вход по биометрии, выход.
 /// Открываются тапом по логотипу на главной.
 /// TODO: политика конфиденциальности и версия — ждут согласования пакетов.
 class SettingsScreen extends ConsumerWidget {
@@ -25,6 +27,8 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
     final session = ref.watch(sessionControllerProvider).value?.session;
+    final bio = ref.watch(biometricControllerProvider).value;
+    final bioKind = bio?.kind;
     String orDash(String? v) => (v == null || v.isEmpty) ? '—' : v;
 
     return Scaffold(
@@ -68,6 +72,17 @@ class SettingsScreen extends ConsumerWidget {
               label: l.settingsChangePin,
               onTap: () => context.push(Routes.changePin),
             ),
+            // Только если на устройстве есть Face ID / отпечаток.
+            if (bio != null && bioKind != null) ...[
+              const SizedBox(height: 12),
+              SettingsSwitchRow(
+                label: l.biometricSettingLabel(bioKind),
+                value: bio.enabled,
+                onChanged: (on) => ref
+                    .read(biometricControllerProvider.notifier)
+                    .setEnabled(on, biometricPrompt(l, cancel: l.cancel)),
+              ),
+            ],
             const SizedBox(height: 12),
             _ActionRow(
               label: l.logout,

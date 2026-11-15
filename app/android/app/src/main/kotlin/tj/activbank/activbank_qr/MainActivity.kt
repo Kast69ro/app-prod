@@ -1,5 +1,6 @@
 package tj.activbank.activbank_qr
 
-import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 
-class MainActivity : FlutterActivity()
+// FragmentActivity — нужна local_auth для системного окна отпечатка.
+class MainActivity : FlutterFragmentActivity()

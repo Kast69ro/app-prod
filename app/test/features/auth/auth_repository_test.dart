@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:activbank_qr/core/api/api_exception.dart';
+import 'package:activbank_qr/core/api/auth_tokens.dart';
 import 'package:activbank_qr/core/storage/secure_store.dart';
 import 'package:activbank_qr/features/auth/data/auth_repository.dart';
 import 'package:activbank_qr/features/auth/data/session_store.dart';
@@ -28,26 +29,41 @@ void main() {
       expect(t.adapter.last!.data, {'phone': '+992931234567'});
     });
 
-    test('verifyOtp собирает сессию, terminalId числом → строкой', () async {
-      final t = fakeApi(
-        (_) async => jsonBody(200, {
-          'ok': true,
-          'message': 'Код подтверждён, вход выполнен',
-          'terminalId': 12345,
-          'terminalName': 'Магазин на Рудаки',
-          'storeName': 'ООО Ромашка',
-        }),
-      );
+    Map<String, Object?> verifyJson({Object? terminal}) => {
+      'ok': true,
+      'message': 'Код подтверждён, вход выполнен',
+      'access_token': 'eyJ.access',
+      'access_expires_in': 900,
+      'refresh_token': 'xzy.refresh',
+      'refresh_expires_in': 2592000,
+      'terminal':
+          terminal ??
+          {
+            'terminalId': 34958,
+            'terminalName': 'Магазин на Рудаки',
+            'terminalPhone': '+992931234567',
+            'storeName': 'ООО Ромашка',
+            'terminalQR': '000201',
+          },
+    };
 
-      final s = await AuthRepository(t.client).verifyOtp('931234567', '123456');
+    test('verifyOtp отдаёт токены и сессию, terminalId → строкой', () async {
+      final t = fakeApi((_) async => jsonBody(200, verifyJson()));
+
+      final r = await AuthRepository(t.client).verifyOtp('931234567', '123456');
 
       expect(
-        s,
+        r.tokens,
+        const AuthTokens(access: 'eyJ.access', refresh: 'xzy.refresh'),
+      );
+      expect(
+        r.session,
         const Session(
           phone: '931234567',
-          terminalId: '12345',
+          terminalId: '34958',
           terminalName: 'Магазин на Рудаки',
           storeName: 'ООО Ромашка',
+          terminalQR: '000201',
         ),
       );
       expect(t.adapter.last!.data, {
@@ -56,8 +72,9 @@ void main() {
       });
     });
 
-    test('ответ не того формата → badResponse', () async {
-      final t = fakeApi((_) async => jsonBody(200, {'terminalName': 42}));
+    test('без токенов в ответе входа нет → badResponse', () async {
+      final json = verifyJson()..remove('refresh_token');
+      final t = fakeApi((_) async => jsonBody(200, json));
 
       await expectLater(
         AuthRepository(t.client).verifyOtp('931234567', '123456'),
@@ -69,6 +86,36 @@ void main() {
           ),
         ),
       );
+    });
+
+    test('терминал не того формата → badResponse', () async {
+      final t = fakeApi(
+        (_) async => jsonBody(200, verifyJson(terminal: {'terminalName': 42})),
+      );
+
+      await expectLater(
+        AuthRepository(t.client).verifyOtp('931234567', '123456'),
+        throwsA(
+          isA<ApiException>().having(
+            (e) => e.kind,
+            'kind',
+            ApiErrorKind.badResponse,
+          ),
+        ),
+      );
+    });
+
+    test('logout отправляет refresh_token без Bearer', () async {
+      final t = fakeApi(
+        (_) async => jsonBody(200, {'ok': true}),
+        tokens: testTokens,
+      );
+
+      await AuthRepository(t.client).logout('refresh-1');
+
+      expect(t.adapter.last!.path, '/pos/auth/logout');
+      expect(t.adapter.last!.data, {'refresh_token': 'refresh-1'});
+      expect(t.adapter.last!.headers.containsKey('Authorization'), isFalse);
     });
   });
 

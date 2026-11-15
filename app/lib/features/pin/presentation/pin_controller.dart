@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/security/biometric_auth.dart';
 import '../../auth/domain/session.dart';
 import '../../auth/presentation/session_controller.dart';
 import '../data/pin_repository.dart';
@@ -35,6 +36,10 @@ abstract class PinState with _$PinState {
     @Default('') String first,
     @Default(false) bool busy,
     PinError? error,
+
+    /// Код подтверждён, на устройстве есть биометрия — экран спрашивает
+    /// «Входить по Face ID?» и вызывает [PinController.finishSetup].
+    BiometricKind? offerBiometric,
   }) = _PinState;
 }
 
@@ -86,6 +91,13 @@ class PinController extends _$PinController {
           state = const PinState(stage: PinStage.create, error: PinMismatch());
           return;
         }
+        final kind = await ref.read(biometricAuthProvider).available();
+        if (!ref.mounted) return;
+        if (kind != null) {
+          // busy остаётся: пока открыт вопрос, ввод не принимаем.
+          state = state.copyWith(offerBiometric: kind);
+          return;
+        }
         // Роутер уведёт на главную, экран закроется.
         await session.createPin(pin);
       case PinStage.unlock:
@@ -99,6 +111,22 @@ class PinController extends _$PinController {
           );
         }
     }
+  }
+
+  /// Ответ на «Входить по Face ID?». «Включить» — сначала сканирование:
+  /// не прошло или отменили — сохраняем код без биометрии.
+  Future<void> finishSetup({
+    required bool enable,
+    required BiometricPrompt prompt,
+  }) async {
+    final pin = state.first;
+    if (state.offerBiometric == null || pin.length != pinLength) return;
+    state = state.copyWith(offerBiometric: null);
+    final biometric =
+        enable && await ref.read(biometricAuthProvider).authenticate(prompt);
+    await ref
+        .read(sessionControllerProvider.notifier)
+        .createPin(pin, biometric: biometric);
   }
 
   /// «Выйти»: стереть сессию, дальше — вход по SMS.

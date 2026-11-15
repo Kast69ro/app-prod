@@ -29,12 +29,17 @@ class LoginScreen extends ConsumerWidget {
     final c = ref.read(loginControllerProvider.notifier);
     final isPhone = s.step == LoginStep.phone;
 
-    // Сессию стёрли после 5 неверных кодов — объясняем, пока человек не начал ввод.
+    // Почему сессию стёрли — объясняем, пока человек не начал ввод.
     final reason = ref.watch(sessionControllerProvider).value?.reason;
+    final String? reasonText = switch (reason) {
+      SignOutReason.pinLockedOut => l.pinLockedOut(pinMaxAttempts),
+      SignOutReason.sessionExpired => l.sessionExpired,
+      null => null,
+    };
     final String? error = s.failure != null
         ? loginFailureText(s.failure!, l)
-        : (reason == SignOutReason.pinLockedOut && isPhone && s.phone.isEmpty)
-        ? l.pinLockedOut(pinMaxAttempts)
+        : (isPhone && s.phone.isEmpty)
+        ? reasonText
         : null;
 
     final String buttonLabel;

@@ -123,12 +123,14 @@ class LoginController extends _$LoginController {
     if (!state.codeReady || state.loading) return;
     state = state.copyWith(loading: true, failure: null);
     try {
-      final session = await ref
+      final signIn = await ref
           .read(authRepositoryProvider)
           .verifyOtp(state.phone, state.code);
       if (!ref.mounted) return;
       state = state.copyWith(loading: false);
-      ref.read(sessionControllerProvider.notifier).otpVerified(session);
+      ref
+          .read(sessionControllerProvider.notifier)
+          .otpVerified(signIn.session, signIn.tokens);
     } on ApiException catch (e) {
       if (!ref.mounted) return;
       state = state.copyWith(

@@ -134,6 +134,43 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get sessionExpired => 'Сессия истекла. Войдите по номеру телефона.';
+
+  @override
+  String get pinBiometricFace => 'Войти по Face ID';
+
+  @override
+  String get pinBiometricFingerprint => 'Войти по отпечатку';
+
+  @override
+  String get biometricReason => 'Подтвердите вход в приложение';
+
+  @override
+  String get biometricUseCode => 'Ввести код';
+
+  @override
+  String get biometricOfferFace => 'Входить по Face ID?';
+
+  @override
+  String get biometricOfferFingerprint => 'Входить по отпечатку?';
+
+  @override
+  String get biometricOfferText =>
+      'Так быстрее, чем вводить код. Код никуда не денется — если не получится, введёте его.';
+
+  @override
+  String get biometricOfferEnable => 'Включить';
+
+  @override
+  String get biometricOfferLater => 'Не сейчас';
+
+  @override
+  String get settingsBiometricFace => 'Вход по Face ID';
+
+  @override
+  String get settingsBiometricFingerprint => 'Вход по отпечатку';
+
+  @override
   String pinEntered(int count, int total) {
     return 'Введено цифр: $count из $total';
   }
@@ -295,6 +332,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get paymentPayer => 'Плательщик';
+
+  @override
+  String get paymentPayerPhone => 'Телефон плательщика';
 
   @override
   String get paymentOurBank => 'ActivBank';

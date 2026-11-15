@@ -5,10 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../helpers/fake_http.dart';
 
 void main() {
-  test('GET возвращает JSON и добавляет phone', () async {
+  test('GET возвращает JSON и идёт с Bearer, без phone', () async {
     final t = fakeApi(
       (_) async => jsonBody(200, {'ok': true}),
-      phone: '+992931234567',
+      tokens: testTokens,
     );
 
     final res = await t.client.get(
@@ -17,21 +17,20 @@ void main() {
     );
 
     expect(res, {'ok': true});
-    expect(t.adapter.last!.queryParameters, {
-      'date': '2026-09-08',
-      'phone': '+992931234567',
-    });
+    expect(t.adapter.last!.queryParameters, {'date': '2026-09-08'});
+    expect(t.adapter.last!.headers['Authorization'], 'Bearer access-1');
   });
 
-  test('POST не получает phone в query', () async {
+  test('ручки входа идут без Bearer', () async {
     final t = fakeApi(
       (_) async => jsonBody(200, {'ok': true}),
-      phone: '+992931234567',
+      tokens: testTokens,
     );
 
     await t.client.post('/pos/otp/request', body: {'phone': '+992931234567'});
 
     expect(t.adapter.last!.queryParameters, isEmpty);
+    expect(t.adapter.last!.headers.containsKey('Authorization'), isFalse);
   });
 
   test('null-параметры не уходят в запрос', () async {

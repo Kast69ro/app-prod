@@ -46,6 +46,26 @@ void main() {
     expect(String.fromCharCodes(pdf.sublist(0, 5)), '%PDF-');
   });
 
+  test('клиент ActivBank с телефоном — тоже собирается', () async {
+    final pdf = await builder.build(
+      Receipt(
+        payment: Payment(
+          sender: 'КУРБОНОВ Мухаммадшариф',
+          type: PaymentType.internal,
+          senderPhone: '9929*****797',
+          amount: 44.55,
+          status: PaymentStatus.success,
+          createdAt: DateTime(2026, 10, 30, 14, 12),
+        ),
+        storeName: 'ООО Ромашка',
+        terminalName: 'Касса 1',
+        terminalId: '12345',
+      ),
+      l,
+    );
+    expect(String.fromCharCodes(pdf.sublist(0, 5)), '%PDF-');
+  });
+
   test('шрифты загружаются один раз', () async {
     await builder.build(receipt(), l);
     await builder.build(receipt(), l);

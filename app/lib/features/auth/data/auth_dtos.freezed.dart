@@ -290,9 +290,288 @@ as int,
 
 
 /// @nodoc
+mixin _$VerifiedTerminalDto {
+
+@JsonKey(fromJson: _idFromJson) String? get terminalId; String get terminalName; String get storeName; String? get terminalQR;
+/// Create a copy of VerifiedTerminalDto
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$VerifiedTerminalDtoCopyWith<VerifiedTerminalDto> get copyWith => _$VerifiedTerminalDtoCopyWithImpl<VerifiedTerminalDto>(this as VerifiedTerminalDto, _$identity);
+
+  /// Serializes this VerifiedTerminalDto to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  final _this = this as VerifiedTerminalDto;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is VerifiedTerminalDto&&(identical(other.terminalId, _this.terminalId) || other.terminalId == _this.terminalId)&&(identical(other.terminalName, _this.terminalName) || other.terminalName == _this.terminalName)&&(identical(other.storeName, _this.storeName) || other.storeName == _this.storeName)&&(identical(other.terminalQR, _this.terminalQR) || other.terminalQR == _this.terminalQR));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode {
+  final _this = this as VerifiedTerminalDto;
+  return Object.hash(runtimeType,_this.terminalId,_this.terminalName,_this.storeName,_this.terminalQR);
+}
+
+@override
+String toString() {
+  final _this = this as VerifiedTerminalDto;
+  return 'VerifiedTerminalDto(terminalId: ${_this.terminalId}, terminalName: ${_this.terminalName}, storeName: ${_this.storeName}, terminalQR: ${_this.terminalQR})';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $VerifiedTerminalDtoCopyWith<$Res>  {
+  factory $VerifiedTerminalDtoCopyWith(VerifiedTerminalDto value, $Res Function(VerifiedTerminalDto) _then) = _$VerifiedTerminalDtoCopyWithImpl;
+@useResult
+$Res call({
+@JsonKey(fromJson: _idFromJson) String? terminalId, String terminalName, String storeName, String? terminalQR
+});
+
+
+
+
+}
+/// @nodoc
+class _$VerifiedTerminalDtoCopyWithImpl<$Res>
+    implements $VerifiedTerminalDtoCopyWith<$Res> {
+  _$VerifiedTerminalDtoCopyWithImpl(this._self, this._then);
+
+  final VerifiedTerminalDto _self;
+  final $Res Function(VerifiedTerminalDto) _then;
+
+/// Create a copy of VerifiedTerminalDto
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? terminalId = freezed,Object? terminalName = null,Object? storeName = null,Object? terminalQR = freezed,}) {
+  return _then(VerifiedTerminalDto(
+terminalId: freezed == terminalId ? _self.terminalId : terminalId // ignore: cast_nullable_to_non_nullable
+as String?,terminalName: null == terminalName ? _self.terminalName : terminalName // ignore: cast_nullable_to_non_nullable
+as String,storeName: null == storeName ? _self.storeName : storeName // ignore: cast_nullable_to_non_nullable
+as String,terminalQR: freezed == terminalQR ? _self.terminalQR : terminalQR // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [VerifiedTerminalDto].
+extension VerifiedTerminalDtoPatterns on VerifiedTerminalDto {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _VerifiedTerminalDto value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _VerifiedTerminalDto() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _VerifiedTerminalDto value)  $default,){
+final _that = this;
+switch (_that) {
+case _VerifiedTerminalDto():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _VerifiedTerminalDto value)?  $default,){
+final _that = this;
+switch (_that) {
+case _VerifiedTerminalDto() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _idFromJson)  String? terminalId,  String terminalName,  String storeName,  String? terminalQR)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _VerifiedTerminalDto() when $default != null:
+return $default(_that.terminalId,_that.terminalName,_that.storeName,_that.terminalQR);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _idFromJson)  String? terminalId,  String terminalName,  String storeName,  String? terminalQR)  $default,) {final _that = this;
+switch (_that) {
+case _VerifiedTerminalDto():
+return $default(_that.terminalId,_that.terminalName,_that.storeName,_that.terminalQR);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(fromJson: _idFromJson)  String? terminalId,  String terminalName,  String storeName,  String? terminalQR)?  $default,) {final _that = this;
+switch (_that) {
+case _VerifiedTerminalDto() when $default != null:
+return $default(_that.terminalId,_that.terminalName,_that.storeName,_that.terminalQR);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _VerifiedTerminalDto implements VerifiedTerminalDto {
+  const _VerifiedTerminalDto({@JsonKey(fromJson: _idFromJson) this.terminalId, this.terminalName = '', this.storeName = '', this.terminalQR});
+  factory _VerifiedTerminalDto.fromJson(Map<String, dynamic> json) => _$VerifiedTerminalDtoFromJson(json);
+
+@override@JsonKey(fromJson: _idFromJson) final  String? terminalId;
+@override@JsonKey() final  String terminalName;
+@override@JsonKey() final  String storeName;
+@override final  String? terminalQR;
+
+/// Create a copy of VerifiedTerminalDto
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$VerifiedTerminalDtoCopyWith<_VerifiedTerminalDto> get copyWith => __$VerifiedTerminalDtoCopyWithImpl<_VerifiedTerminalDto>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$VerifiedTerminalDtoToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _VerifiedTerminalDto&&(identical(other.terminalId, terminalId) || other.terminalId == terminalId)&&(identical(other.terminalName, terminalName) || other.terminalName == terminalName)&&(identical(other.storeName, storeName) || other.storeName == storeName)&&(identical(other.terminalQR, terminalQR) || other.terminalQR == terminalQR));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode {
+    return Object.hash(runtimeType,terminalId,terminalName,storeName,terminalQR);
+}
+
+@override
+String toString() {
+    return 'VerifiedTerminalDto(terminalId: $terminalId, terminalName: $terminalName, storeName: $storeName, terminalQR: $terminalQR)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$VerifiedTerminalDtoCopyWith<$Res> implements $VerifiedTerminalDtoCopyWith<$Res> {
+  factory _$VerifiedTerminalDtoCopyWith(_VerifiedTerminalDto value, $Res Function(_VerifiedTerminalDto) _then) = __$VerifiedTerminalDtoCopyWithImpl;
+@override @useResult
+$Res call({
+@JsonKey(fromJson: _idFromJson) String? terminalId, String terminalName, String storeName, String? terminalQR
+});
+
+
+
+
+}
+/// @nodoc
+class __$VerifiedTerminalDtoCopyWithImpl<$Res>
+    implements _$VerifiedTerminalDtoCopyWith<$Res> {
+  __$VerifiedTerminalDtoCopyWithImpl(this._self, this._then);
+
+  final _VerifiedTerminalDto _self;
+  final $Res Function(_VerifiedTerminalDto) _then;
+
+/// Create a copy of VerifiedTerminalDto
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? terminalId = freezed,Object? terminalName = null,Object? storeName = null,Object? terminalQR = freezed,}) {
+  return _then(_VerifiedTerminalDto(
+terminalId: freezed == terminalId ? _self.terminalId : terminalId // ignore: cast_nullable_to_non_nullable
+as String?,terminalName: null == terminalName ? _self.terminalName : terminalName // ignore: cast_nullable_to_non_nullable
+as String,storeName: null == storeName ? _self.storeName : storeName // ignore: cast_nullable_to_non_nullable
+as String,terminalQR: freezed == terminalQR ? _self.terminalQR : terminalQR // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
 mixin _$OtpVerifyDto {
 
- bool get ok;@JsonKey(fromJson: _idFromJson) String? get terminalId; String get terminalName; String get storeName;
+ bool get ok; VerifiedTerminalDto get terminal;
 /// Create a copy of OtpVerifyDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -306,20 +585,20 @@ $OtpVerifyDtoCopyWith<OtpVerifyDto> get copyWith => _$OtpVerifyDtoCopyWithImpl<O
 @override
 bool operator ==(Object other) {
   final _this = this as OtpVerifyDto;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OtpVerifyDto&&(identical(other.ok, _this.ok) || other.ok == _this.ok)&&(identical(other.terminalId, _this.terminalId) || other.terminalId == _this.terminalId)&&(identical(other.terminalName, _this.terminalName) || other.terminalName == _this.terminalName)&&(identical(other.storeName, _this.storeName) || other.storeName == _this.storeName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OtpVerifyDto&&(identical(other.ok, _this.ok) || other.ok == _this.ok)&&(identical(other.terminal, _this.terminal) || other.terminal == _this.terminal));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as OtpVerifyDto;
-  return Object.hash(runtimeType,_this.ok,_this.terminalId,_this.terminalName,_this.storeName);
+  return Object.hash(runtimeType,_this.ok,_this.terminal);
 }
 
 @override
 String toString() {
   final _this = this as OtpVerifyDto;
-  return 'OtpVerifyDto(ok: ${_this.ok}, terminalId: ${_this.terminalId}, terminalName: ${_this.terminalName}, storeName: ${_this.storeName})';
+  return 'OtpVerifyDto(ok: ${_this.ok}, terminal: ${_this.terminal})';
 }
 
 
@@ -330,11 +609,11 @@ abstract mixin class $OtpVerifyDtoCopyWith<$Res>  {
   factory $OtpVerifyDtoCopyWith(OtpVerifyDto value, $Res Function(OtpVerifyDto) _then) = _$OtpVerifyDtoCopyWithImpl;
 @useResult
 $Res call({
- bool ok,@JsonKey(fromJson: _idFromJson) String? terminalId, String terminalName, String storeName
+ bool ok, VerifiedTerminalDto terminal
 });
 
 
-
+$VerifiedTerminalDtoCopyWith<$Res> get terminal;
 
 }
 /// @nodoc
@@ -347,16 +626,23 @@ class _$OtpVerifyDtoCopyWithImpl<$Res>
 
 /// Create a copy of OtpVerifyDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? ok = null,Object? terminalId = freezed,Object? terminalName = null,Object? storeName = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? ok = null,Object? terminal = null,}) {
   return _then(OtpVerifyDto(
 ok: null == ok ? _self.ok : ok // ignore: cast_nullable_to_non_nullable
-as bool,terminalId: freezed == terminalId ? _self.terminalId : terminalId // ignore: cast_nullable_to_non_nullable
-as String?,terminalName: null == terminalName ? _self.terminalName : terminalName // ignore: cast_nullable_to_non_nullable
-as String,storeName: null == storeName ? _self.storeName : storeName // ignore: cast_nullable_to_non_nullable
-as String,
+as bool,terminal: null == terminal ? _self.terminal : terminal // ignore: cast_nullable_to_non_nullable
+as VerifiedTerminalDto,
   ));
 }
-
+/// Create a copy of OtpVerifyDto
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$VerifiedTerminalDtoCopyWith<$Res> get terminal {
+  
+  return $VerifiedTerminalDtoCopyWith<$Res>(_self.terminal, (value) {
+    return _then(_self.copyWith(terminal: value));
+  });
+}
 }
 
 
@@ -438,10 +724,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool ok, @JsonKey(fromJson: _idFromJson)  String? terminalId,  String terminalName,  String storeName)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool ok,  VerifiedTerminalDto terminal)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OtpVerifyDto() when $default != null:
-return $default(_that.ok,_that.terminalId,_that.terminalName,_that.storeName);case _:
+return $default(_that.ok,_that.terminal);case _:
   return orElse();
 
 }
@@ -459,10 +745,10 @@ return $default(_that.ok,_that.terminalId,_that.terminalName,_that.storeName);ca
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool ok, @JsonKey(fromJson: _idFromJson)  String? terminalId,  String terminalName,  String storeName)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool ok,  VerifiedTerminalDto terminal)  $default,) {final _that = this;
 switch (_that) {
 case _OtpVerifyDto():
-return $default(_that.ok,_that.terminalId,_that.terminalName,_that.storeName);case _:
+return $default(_that.ok,_that.terminal);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -479,10 +765,10 @@ return $default(_that.ok,_that.terminalId,_that.terminalName,_that.storeName);ca
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool ok, @JsonKey(fromJson: _idFromJson)  String? terminalId,  String terminalName,  String storeName)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool ok,  VerifiedTerminalDto terminal)?  $default,) {final _that = this;
 switch (_that) {
 case _OtpVerifyDto() when $default != null:
-return $default(_that.ok,_that.terminalId,_that.terminalName,_that.storeName);case _:
+return $default(_that.ok,_that.terminal);case _:
   return null;
 
 }
@@ -494,13 +780,11 @@ return $default(_that.ok,_that.terminalId,_that.terminalName,_that.storeName);ca
 @JsonSerializable()
 
 class _OtpVerifyDto implements OtpVerifyDto {
-  const _OtpVerifyDto({this.ok = true, @JsonKey(fromJson: _idFromJson) this.terminalId, this.terminalName = '', this.storeName = ''});
+  const _OtpVerifyDto({this.ok = true, this.terminal = const VerifiedTerminalDto()});
   factory _OtpVerifyDto.fromJson(Map<String, dynamic> json) => _$OtpVerifyDtoFromJson(json);
 
 @override@JsonKey() final  bool ok;
-@override@JsonKey(fromJson: _idFromJson) final  String? terminalId;
-@override@JsonKey() final  String terminalName;
-@override@JsonKey() final  String storeName;
+@override@JsonKey() final  VerifiedTerminalDto terminal;
 
 /// Create a copy of OtpVerifyDto
 /// with the given fields replaced by the non-null parameter values.
@@ -515,18 +799,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _OtpVerifyDto&&(identical(other.ok, ok) || other.ok == ok)&&(identical(other.terminalId, terminalId) || other.terminalId == terminalId)&&(identical(other.terminalName, terminalName) || other.terminalName == terminalName)&&(identical(other.storeName, storeName) || other.storeName == storeName));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _OtpVerifyDto&&(identical(other.ok, ok) || other.ok == ok)&&(identical(other.terminal, terminal) || other.terminal == terminal));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,ok,terminalId,terminalName,storeName);
+    return Object.hash(runtimeType,ok,terminal);
 }
 
 @override
 String toString() {
-    return 'OtpVerifyDto(ok: $ok, terminalId: $terminalId, terminalName: $terminalName, storeName: $storeName)';
+    return 'OtpVerifyDto(ok: $ok, terminal: $terminal)';
 }
 
 
@@ -537,11 +821,11 @@ abstract mixin class _$OtpVerifyDtoCopyWith<$Res> implements $OtpVerifyDtoCopyWi
   factory _$OtpVerifyDtoCopyWith(_OtpVerifyDto value, $Res Function(_OtpVerifyDto) _then) = __$OtpVerifyDtoCopyWithImpl;
 @override @useResult
 $Res call({
- bool ok,@JsonKey(fromJson: _idFromJson) String? terminalId, String terminalName, String storeName
+ bool ok, VerifiedTerminalDto terminal
 });
 
 
-
+@override $VerifiedTerminalDtoCopyWith<$Res> get terminal;
 
 }
 /// @nodoc
@@ -554,17 +838,24 @@ class __$OtpVerifyDtoCopyWithImpl<$Res>
 
 /// Create a copy of OtpVerifyDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? ok = null,Object? terminalId = freezed,Object? terminalName = null,Object? storeName = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? ok = null,Object? terminal = null,}) {
   return _then(_OtpVerifyDto(
 ok: null == ok ? _self.ok : ok // ignore: cast_nullable_to_non_nullable
-as bool,terminalId: freezed == terminalId ? _self.terminalId : terminalId // ignore: cast_nullable_to_non_nullable
-as String?,terminalName: null == terminalName ? _self.terminalName : terminalName // ignore: cast_nullable_to_non_nullable
-as String,storeName: null == storeName ? _self.storeName : storeName // ignore: cast_nullable_to_non_nullable
-as String,
+as bool,terminal: null == terminal ? _self.terminal : terminal // ignore: cast_nullable_to_non_nullable
+as VerifiedTerminalDto,
   ));
 }
 
-
+/// Create a copy of OtpVerifyDto
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$VerifiedTerminalDtoCopyWith<$Res> get terminal {
+  
+  return $VerifiedTerminalDtoCopyWith<$Res>(_self.terminal, (value) {
+    return _then(_self.copyWith(terminal: value));
+  });
+}
 }
 
 // dart format on

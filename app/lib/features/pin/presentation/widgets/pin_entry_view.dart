@@ -20,6 +20,7 @@ class PinEntryView extends StatelessWidget {
     required this.value,
     required this.error,
     required this.onKey,
+    this.action,
     this.footer,
   });
 
@@ -31,6 +32,9 @@ class PinEntryView extends StatelessWidget {
   final String value;
   final String? error;
   final ValueChanged<String?> onKey;
+
+  /// Под точками и ошибкой, например «Войти по Face ID».
+  final Widget? action;
 
   /// Внизу, над клавиатурой, например «Выйти».
   final Widget? footer;
@@ -89,6 +93,10 @@ class PinEntryView extends StatelessWidget {
                       if (error != null) ...[
                         const SizedBox(height: 22),
                         ErrorBox(error!),
+                      ],
+                      if (action != null) ...[
+                        const SizedBox(height: 18),
+                        action!,
                       ],
                     ],
                   ),

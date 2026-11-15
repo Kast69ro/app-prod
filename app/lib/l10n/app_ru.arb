@@ -64,6 +64,18 @@
       "count": {"type": "int"}
     }
   },
+  "sessionExpired": "Сессия истекла. Войдите по номеру телефона.",
+  "pinBiometricFace": "Войти по Face ID",
+  "pinBiometricFingerprint": "Войти по отпечатку",
+  "biometricReason": "Подтвердите вход в приложение",
+  "biometricUseCode": "Ввести код",
+  "biometricOfferFace": "Входить по Face ID?",
+  "biometricOfferFingerprint": "Входить по отпечатку?",
+  "biometricOfferText": "Так быстрее, чем вводить код. Код никуда не денется — если не получится, введёте его.",
+  "biometricOfferEnable": "Включить",
+  "biometricOfferLater": "Не сейчас",
+  "settingsBiometricFace": "Вход по Face ID",
+  "settingsBiometricFingerprint": "Вход по отпечатку",
   "pinEntered": "Введено цифр: {count} из {total}",
   "@pinEntered": {
     "placeholders": {
@@ -141,6 +153,7 @@
   "paymentTime": "Время",
   "paymentBank": "Банк-отправитель",
   "paymentPayer": "Плательщик",
+  "paymentPayerPhone": "Телефон плательщика",
   "paymentOurBank": "ActivBank",
   "reportSender": "Банк / Плательщик",
   "paymentTrail": "Ход операции",

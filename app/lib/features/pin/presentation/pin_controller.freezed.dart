@@ -16,7 +16,9 @@ T _$identity<T>(T value) => value;
 mixin _$PinState {
 
  PinStage get stage; String get pin;/// Код с первого ввода — до подтверждения, только в памяти.
- String get first; bool get busy; PinError? get error;
+ String get first; bool get busy; PinError? get error;/// Код подтверждён, на устройстве есть биометрия — экран спрашивает
+/// «Входить по Face ID?» и вызывает [PinController.finishSetup].
+ BiometricKind? get offerBiometric;
 /// Create a copy of PinState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,20 +30,20 @@ $PinStateCopyWith<PinState> get copyWith => _$PinStateCopyWithImpl<PinState>(thi
 @override
 bool operator ==(Object other) {
   final _this = this as PinState;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PinState&&(identical(other.stage, _this.stage) || other.stage == _this.stage)&&(identical(other.pin, _this.pin) || other.pin == _this.pin)&&(identical(other.first, _this.first) || other.first == _this.first)&&(identical(other.busy, _this.busy) || other.busy == _this.busy)&&(identical(other.error, _this.error) || other.error == _this.error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PinState&&(identical(other.stage, _this.stage) || other.stage == _this.stage)&&(identical(other.pin, _this.pin) || other.pin == _this.pin)&&(identical(other.first, _this.first) || other.first == _this.first)&&(identical(other.busy, _this.busy) || other.busy == _this.busy)&&(identical(other.error, _this.error) || other.error == _this.error)&&(identical(other.offerBiometric, _this.offerBiometric) || other.offerBiometric == _this.offerBiometric));
 }
 
 
 @override
 int get hashCode {
   final _this = this as PinState;
-  return Object.hash(runtimeType,_this.stage,_this.pin,_this.first,_this.busy,_this.error);
+  return Object.hash(runtimeType,_this.stage,_this.pin,_this.first,_this.busy,_this.error,_this.offerBiometric);
 }
 
 @override
 String toString() {
   final _this = this as PinState;
-  return 'PinState(stage: ${_this.stage}, pin: ${_this.pin}, first: ${_this.first}, busy: ${_this.busy}, error: ${_this.error})';
+  return 'PinState(stage: ${_this.stage}, pin: ${_this.pin}, first: ${_this.first}, busy: ${_this.busy}, error: ${_this.error}, offerBiometric: ${_this.offerBiometric})';
 }
 
 
@@ -52,7 +54,7 @@ abstract mixin class $PinStateCopyWith<$Res>  {
   factory $PinStateCopyWith(PinState value, $Res Function(PinState) _then) = _$PinStateCopyWithImpl;
 @useResult
 $Res call({
- PinStage stage, String pin, String first, bool busy, PinError? error
+ PinStage stage, String pin, String first, bool busy, PinError? error, BiometricKind? offerBiometric
 });
 
 
@@ -69,14 +71,15 @@ class _$PinStateCopyWithImpl<$Res>
 
 /// Create a copy of PinState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? stage = null,Object? pin = null,Object? first = null,Object? busy = null,Object? error = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? stage = null,Object? pin = null,Object? first = null,Object? busy = null,Object? error = freezed,Object? offerBiometric = freezed,}) {
   return _then(PinState(
 stage: null == stage ? _self.stage : stage // ignore: cast_nullable_to_non_nullable
 as PinStage,pin: null == pin ? _self.pin : pin // ignore: cast_nullable_to_non_nullable
 as String,first: null == first ? _self.first : first // ignore: cast_nullable_to_non_nullable
 as String,busy: null == busy ? _self.busy : busy // ignore: cast_nullable_to_non_nullable
 as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
-as PinError?,
+as PinError?,offerBiometric: freezed == offerBiometric ? _self.offerBiometric : offerBiometric // ignore: cast_nullable_to_non_nullable
+as BiometricKind?,
   ));
 }
 
@@ -161,10 +164,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PinStage stage,  String pin,  String first,  bool busy,  PinError? error)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PinStage stage,  String pin,  String first,  bool busy,  PinError? error,  BiometricKind? offerBiometric)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PinState() when $default != null:
-return $default(_that.stage,_that.pin,_that.first,_that.busy,_that.error);case _:
+return $default(_that.stage,_that.pin,_that.first,_that.busy,_that.error,_that.offerBiometric);case _:
   return orElse();
 
 }
@@ -182,10 +185,10 @@ return $default(_that.stage,_that.pin,_that.first,_that.busy,_that.error);case _
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PinStage stage,  String pin,  String first,  bool busy,  PinError? error)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PinStage stage,  String pin,  String first,  bool busy,  PinError? error,  BiometricKind? offerBiometric)  $default,) {final _that = this;
 switch (_that) {
 case _PinState():
-return $default(_that.stage,_that.pin,_that.first,_that.busy,_that.error);case _:
+return $default(_that.stage,_that.pin,_that.first,_that.busy,_that.error,_that.offerBiometric);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -202,10 +205,10 @@ return $default(_that.stage,_that.pin,_that.first,_that.busy,_that.error);case _
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PinStage stage,  String pin,  String first,  bool busy,  PinError? error)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PinStage stage,  String pin,  String first,  bool busy,  PinError? error,  BiometricKind? offerBiometric)?  $default,) {final _that = this;
 switch (_that) {
 case _PinState() when $default != null:
-return $default(_that.stage,_that.pin,_that.first,_that.busy,_that.error);case _:
+return $default(_that.stage,_that.pin,_that.first,_that.busy,_that.error,_that.offerBiometric);case _:
   return null;
 
 }
@@ -217,7 +220,7 @@ return $default(_that.stage,_that.pin,_that.first,_that.busy,_that.error);case _
 
 
 class _PinState implements PinState {
-  const _PinState({required this.stage, this.pin = '', this.first = '', this.busy = false, this.error});
+  const _PinState({required this.stage, this.pin = '', this.first = '', this.busy = false, this.error, this.offerBiometric});
   
 
 @override final  PinStage stage;
@@ -226,6 +229,9 @@ class _PinState implements PinState {
 @override@JsonKey() final  String first;
 @override@JsonKey() final  bool busy;
 @override final  PinError? error;
+/// Код подтверждён, на устройстве есть биометрия — экран спрашивает
+/// «Входить по Face ID?» и вызывает [PinController.finishSetup].
+@override final  BiometricKind? offerBiometric;
 
 /// Create a copy of PinState
 /// with the given fields replaced by the non-null parameter values.
@@ -237,18 +243,18 @@ _$PinStateCopyWith<_PinState> get copyWith => __$PinStateCopyWithImpl<_PinState>
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _PinState&&(identical(other.stage, stage) || other.stage == stage)&&(identical(other.pin, pin) || other.pin == pin)&&(identical(other.first, first) || other.first == first)&&(identical(other.busy, busy) || other.busy == busy)&&(identical(other.error, error) || other.error == error));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _PinState&&(identical(other.stage, stage) || other.stage == stage)&&(identical(other.pin, pin) || other.pin == pin)&&(identical(other.first, first) || other.first == first)&&(identical(other.busy, busy) || other.busy == busy)&&(identical(other.error, error) || other.error == error)&&(identical(other.offerBiometric, offerBiometric) || other.offerBiometric == offerBiometric));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,stage,pin,first,busy,error);
+    return Object.hash(runtimeType,stage,pin,first,busy,error,offerBiometric);
 }
 
 @override
 String toString() {
-    return 'PinState(stage: $stage, pin: $pin, first: $first, busy: $busy, error: $error)';
+    return 'PinState(stage: $stage, pin: $pin, first: $first, busy: $busy, error: $error, offerBiometric: $offerBiometric)';
 }
 
 
@@ -259,7 +265,7 @@ abstract mixin class _$PinStateCopyWith<$Res> implements $PinStateCopyWith<$Res>
   factory _$PinStateCopyWith(_PinState value, $Res Function(_PinState) _then) = __$PinStateCopyWithImpl;
 @override @useResult
 $Res call({
- PinStage stage, String pin, String first, bool busy, PinError? error
+ PinStage stage, String pin, String first, bool busy, PinError? error, BiometricKind? offerBiometric
 });
 
 
@@ -276,14 +282,15 @@ class __$PinStateCopyWithImpl<$Res>
 
 /// Create a copy of PinState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? stage = null,Object? pin = null,Object? first = null,Object? busy = null,Object? error = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? stage = null,Object? pin = null,Object? first = null,Object? busy = null,Object? error = freezed,Object? offerBiometric = freezed,}) {
   return _then(_PinState(
 stage: null == stage ? _self.stage : stage // ignore: cast_nullable_to_non_nullable
 as PinStage,pin: null == pin ? _self.pin : pin // ignore: cast_nullable_to_non_nullable
 as String,first: null == first ? _self.first : first // ignore: cast_nullable_to_non_nullable
 as String,busy: null == busy ? _self.busy : busy // ignore: cast_nullable_to_non_nullable
 as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
-as PinError?,
+as PinError?,offerBiometric: freezed == offerBiometric ? _self.offerBiometric : offerBiometric // ignore: cast_nullable_to_non_nullable
+as BiometricKind?,
   ));
 }
 

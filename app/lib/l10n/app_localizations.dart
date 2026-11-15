@@ -322,6 +322,78 @@ abstract class AppLocalizations {
   /// **'Код входа введён неверно {count} раз. Войдите по номеру телефона.'**
   String pinLockedOut(int count);
 
+  /// No description provided for @sessionExpired.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сессия истекла. Войдите по номеру телефона.'**
+  String get sessionExpired;
+
+  /// No description provided for @pinBiometricFace.
+  ///
+  /// In ru, this message translates to:
+  /// **'Войти по Face ID'**
+  String get pinBiometricFace;
+
+  /// No description provided for @pinBiometricFingerprint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Войти по отпечатку'**
+  String get pinBiometricFingerprint;
+
+  /// No description provided for @biometricReason.
+  ///
+  /// In ru, this message translates to:
+  /// **'Подтвердите вход в приложение'**
+  String get biometricReason;
+
+  /// No description provided for @biometricUseCode.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ввести код'**
+  String get biometricUseCode;
+
+  /// No description provided for @biometricOfferFace.
+  ///
+  /// In ru, this message translates to:
+  /// **'Входить по Face ID?'**
+  String get biometricOfferFace;
+
+  /// No description provided for @biometricOfferFingerprint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Входить по отпечатку?'**
+  String get biometricOfferFingerprint;
+
+  /// No description provided for @biometricOfferText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Так быстрее, чем вводить код. Код никуда не денется — если не получится, введёте его.'**
+  String get biometricOfferText;
+
+  /// No description provided for @biometricOfferEnable.
+  ///
+  /// In ru, this message translates to:
+  /// **'Включить'**
+  String get biometricOfferEnable;
+
+  /// No description provided for @biometricOfferLater.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не сейчас'**
+  String get biometricOfferLater;
+
+  /// No description provided for @settingsBiometricFace.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вход по Face ID'**
+  String get settingsBiometricFace;
+
+  /// No description provided for @settingsBiometricFingerprint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вход по отпечатку'**
+  String get settingsBiometricFingerprint;
+
   /// No description provided for @pinEntered.
   ///
   /// In ru, this message translates to:
@@ -609,6 +681,12 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Плательщик'**
   String get paymentPayer;
+
+  /// No description provided for @paymentPayerPhone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Телефон плательщика'**
+  String get paymentPayerPhone;
 
   /// No description provided for @paymentOurBank.
   ///

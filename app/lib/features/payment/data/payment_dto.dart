@@ -13,6 +13,8 @@ abstract class PaymentDto with _$PaymentDto {
     String? type,
     String? sender,
     @JsonKey(name: 'sender_bank_id') int? senderBankId,
+    // Маскированный телефон плательщика (только internal): `9929*****797`.
+    @JsonKey(name: 'sender_phone') String? senderPhone,
     @Default(0) num amount,
     String? status,
     @JsonKey(name: 'creation_datetime') String? creationDatetime,
@@ -25,10 +27,12 @@ abstract class PaymentDto with _$PaymentDto {
 
   Payment toDomain() {
     final name = sender?.trim();
+    final phone = senderPhone?.trim();
     return Payment(
       sender: (name == null || name.isEmpty) ? '—' : name,
       type: PaymentType.parse(type),
       senderBankId: senderBankId,
+      senderPhone: (phone == null || phone.isEmpty) ? null : phone,
       amount: amount.toDouble(),
       status: PaymentStatus.parse(status),
       // Дата без часового пояса — это местное время банка.

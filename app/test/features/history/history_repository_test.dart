@@ -32,17 +32,13 @@ void main() {
             },
           ],
         }),
-        phone: '+992931234567',
+        tokens: testTokens,
       );
 
       final page = await HistoryRepository(t.client).getPage(offset: 50);
 
       expect(t.adapter.last!.path, '/pos/history');
-      expect(t.adapter.last!.queryParameters, {
-        'limit': 50,
-        'offset': 50,
-        'phone': '+992931234567',
-      });
+      expect(t.adapter.last!.queryParameters, {'limit': 50, 'offset': 50});
       expect(page.total, 137);
       expect(page.offset, 50);
       expect(page.payments, [
@@ -71,6 +67,7 @@ void main() {
               'type': 'internal',
               'sender': 'КУРБОНОВ Мухаммадшариф',
               'sender_bank_id': null,
+              'sender_phone': '9929*****797',
               'amount': 44.55,
               'status': 'success',
               'creation_datetime': '2026-10-30T14:12:00',
@@ -102,6 +99,8 @@ void main() {
       ]);
       expect(page.payments.first.isInternal, isTrue);
       expect(page.payments.first.sender, 'КУРБОНОВ Мухаммадшариф');
+      expect(page.payments.first.senderPhone, '9929*****797');
+      expect(page.payments[1].senderPhone, isNull);
     });
 
     test('пустая история', () async {

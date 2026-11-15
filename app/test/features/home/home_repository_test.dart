@@ -27,13 +27,14 @@ void main() {
             'creation_datetime': '2026-09-08T14:12:00',
           },
         }),
-        phone: '+992931234567',
+        tokens: testTokens,
       );
 
       final info = await HomeRepository(t.client).getTerminal();
 
       expect(t.adapter.last!.path, '/pos/terminal');
-      expect(t.adapter.last!.queryParameters, {'phone': '+992931234567'});
+      expect(t.adapter.last!.queryParameters, isEmpty);
+      expect(t.adapter.last!.headers['Authorization'], 'Bearer access-1');
       expect(info.terminalName, 'Магазин на Рудаки');
       expect(info.terminalQR, '00020101021226');
       expect(

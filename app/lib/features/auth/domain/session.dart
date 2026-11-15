@@ -37,7 +37,13 @@ enum AuthStatus {
 }
 
 /// Почему сессию стёрли — показываем на экране входа.
-enum SignOutReason { pinLockedOut }
+enum SignOutReason {
+  /// 5 неверных вводов кода.
+  pinLockedOut,
+
+  /// Бэк отклонил refresh-токен (истёк или отозван).
+  sessionExpired,
+}
 
 @freezed
 abstract class SessionState with _$SessionState {

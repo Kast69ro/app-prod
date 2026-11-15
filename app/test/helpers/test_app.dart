@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:activbank_qr/app/app.dart';
 import 'package:activbank_qr/app/bootstrap.dart';
 import 'package:activbank_qr/core/api/api_providers.dart';
+import 'package:activbank_qr/core/security/biometric_auth.dart';
 import 'package:activbank_qr/core/security/pin_hasher.dart';
 import 'package:activbank_qr/core/storage/preferences.dart';
 import 'package:activbank_qr/core/storage/secure_store.dart';
@@ -30,8 +31,12 @@ class FakeBackend {
   /// Параметры запросов `/pos/history` — проверять фильтр периода.
   final historyQueries = <Map<String, dynamic>>[];
 
+  /// Заголовки `Authorization` по порядку запросов (`null` — без него).
+  final authHeaders = <Object?>[];
+
   Future<ResponseBody> respond(RequestOptions o) async {
     requests.add(o.path);
+    authHeaders.add(o.headers['Authorization']);
     if (o.path == '/pos/history') historyQueries.add(o.queryParameters);
     switch (o.path) {
       case '/pos/otp/request':
@@ -42,10 +47,20 @@ class FakeBackend {
         }
         return jsonBody(200, {
           'ok': true,
-          'terminalId': 12345,
-          'terminalName': 'Магазин на Рудаки',
-          'storeName': 'ООО Ромашка',
+          'access_token': 'access-1',
+          'access_expires_in': 900,
+          'refresh_token': 'refresh-1',
+          'refresh_expires_in': 2592000,
+          'terminal': {
+            'terminalId': 12345,
+            'terminalName': 'Магазин на Рудаки',
+            'storeName': 'ООО Ромашка',
+          },
         });
+      case '/pos/auth/refresh':
+        return jsonBody(401, {'detail': 'Refresh недействителен'});
+      case '/pos/auth/logout':
+        return jsonBody(200, {'ok': true});
       case '/pos/terminal':
         if (terminalFails) {
           throw DioException.connectionError(requestOptions: o, reason: 'x');
@@ -115,6 +130,30 @@ class FakeSmsCodeReader implements SmsCodeReader {
   }
 }
 
+/// Face ID / отпечаток без системы. По умолчанию биометрии на устройстве нет.
+class FakeBiometricAuth implements BiometricAuth {
+  FakeBiometricAuth({this.kind, this.succeeds = true});
+
+  BiometricKind? kind;
+
+  /// Чем ответит следующее сканирование.
+  bool succeeds;
+
+  /// Сколько раз открывалось системное окно.
+  int prompts = 0;
+  BiometricPrompt? lastPrompt;
+
+  @override
+  Future<BiometricKind?> available() async => kind;
+
+  @override
+  Future<bool> authenticate(BiometricPrompt prompt) async {
+    prompts++;
+    lastPrompt = prompt;
+    return succeeds;
+  }
+}
+
 /// Приложение с памятью вместо хранилища и ненастоящим бэком.
 /// По умолчанию — маленький экран (320×568) и шрифт 1,3×.
 /// [prefs] — обычные настройки (тема); `null` — оставить прежние,
@@ -126,6 +165,7 @@ Future<MemorySecureStore> pumpTestApp(
   Size size = const Size(320, 568),
   double textScale = 1.3,
   FakeSmsCodeReader? sms,
+  FakeBiometricAuth? biometrics,
   List<Override> overrides = const [],
   Map<String, Object>? prefs = const {},
 }) async {
@@ -147,13 +187,16 @@ Future<MemorySecureStore> pumpTestApp(
         secureStoreProvider.overrideWithValue(mem),
         preferencesProvider.overrideWithValue(sharedPrefs),
         smsCodeReaderProvider.overrideWithValue(sms ?? FakeSmsCodeReader()),
+        biometricAuthProvider.overrideWithValue(
+          biometrics ?? FakeBiometricAuth(),
+        ),
         pinRepositoryProvider.overrideWithValue(
           PinRepository(mem, hasher: const PinHasher(iterations: 10)),
         ),
         apiClientProvider.overrideWith(
           (ref) => fakeApi(
             backend.respond,
-            readPhone: () => ref.read(authCredentialsProvider),
+            auth: (dio) => authInterceptorFor(ref, dio),
           ).client,
         ),
         ...overrides,

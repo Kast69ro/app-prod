@@ -8,11 +8,17 @@ abstract final class SecureKeys {
   /// JSON сессии: телефон и данные точки.
   static const session = 'abqr.session.v1';
 
+  /// Access + refresh токены.
+  static const tokens = 'abqr.tokens.v1';
+
   /// Соль и хеш кода доступа.
   static const pinRecord = 'abqr.pin.v1';
 
   /// Счётчик неверных вводов кода — переживает перезапуск приложения.
   static const pinFailures = 'abqr.pin.failures.v1';
+
+  /// Вход по Face ID / отпечатку включён (`1`). Стирается вместе с сессией.
+  static const biometric = 'abqr.biometric.v1';
 }
 
 /// Обёртка, чтобы в тестах подменять хранилище на память.

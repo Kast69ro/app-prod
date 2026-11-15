@@ -36,7 +36,7 @@ final class SessionControllerProvider
   SessionController create() => SessionController();
 }
 
-String _$sessionControllerHash() => r'7b3e9722a9a54cb787d9c3356ede5f99ff51c790';
+String _$sessionControllerHash() => r'4095264a350e2baba11f2eb910594d6746295315';
 
 /// Состояние входа на всё приложение. По нему роутер выбирает экран.
 
