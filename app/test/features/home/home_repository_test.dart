@@ -32,7 +32,7 @@ void main() {
 
       final info = await HomeRepository(t.client).getTerminal();
 
-      expect(t.adapter.last!.path, '/pos/terminal');
+      expect(t.adapter.last!.path, '/mobi/terminal');
       expect(t.adapter.last!.queryParameters, isEmpty);
       expect(t.adapter.last!.headers['Authorization'], 'Bearer access-1');
       expect(info.terminalName, 'Магазин на Рудаки');

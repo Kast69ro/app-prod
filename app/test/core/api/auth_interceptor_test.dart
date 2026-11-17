@@ -22,7 +22,7 @@ class TokenBackend {
   final refreshBodies = <Object?>[];
 
   Future<ResponseBody> respond(RequestOptions o) async {
-    if (o.path == '/pos/auth/refresh') {
+    if (o.path == '/mobi/auth/refresh') {
       refreshCalls++;
       refreshBodies.add(o.data);
       await refreshGate?.future;
@@ -73,9 +73,9 @@ void main() {
   test('401 → refresh → повтор с новым access', () async {
     final t = api();
 
-    final res = await t.client.get('/pos/terminal');
+    final res = await t.client.get('/mobi/terminal');
 
-    expect(res, {'path': '/pos/terminal'});
+    expect(res, {'path': '/mobi/terminal'});
     expect(backend.refreshCalls, 1);
     expect(backend.refreshBodies.single, {'refresh_token': 'refresh-1'});
     // Ротация: новая пара сохранена целиком.
@@ -88,18 +88,18 @@ void main() {
     final t = api();
 
     final all = Future.wait([
-      t.client.get('/pos/terminal'),
-      t.client.get('/pos/summary'),
-      t.client.get('/pos/history'),
+      t.client.get('/mobi/terminal'),
+      t.client.get('/mobi/summary'),
+      t.client.get('/mobi/history'),
     ]);
     await Future<void>.delayed(const Duration(milliseconds: 20));
     backend.refreshGate!.complete();
     final results = await all;
 
     expect(results.map((r) => r['path']), [
-      '/pos/terminal',
-      '/pos/summary',
-      '/pos/history',
+      '/mobi/terminal',
+      '/mobi/summary',
+      '/mobi/history',
     ]);
     expect(backend.refreshCalls, 1);
   });
@@ -115,9 +115,9 @@ void main() {
       return backend.respond(o);
     }, auth: (dio) => interceptor(dio));
 
-    final res = await t.client.get('/pos/terminal');
+    final res = await t.client.get('/mobi/terminal');
 
-    expect(res, {'path': '/pos/terminal'});
+    expect(res, {'path': '/mobi/terminal'});
     expect(backend.refreshCalls, 0);
   });
 
@@ -126,7 +126,7 @@ void main() {
     final t = api();
 
     await expectLater(
-      t.client.get('/pos/terminal'),
+      t.client.get('/mobi/terminal'),
       throwsA(
         isA<ApiException>().having((e) => e.statusCode, 'statusCode', 401),
       ),
@@ -137,14 +137,14 @@ void main() {
 
   test('повтор снова 401 → второго refresh нет', () async {
     final t = fakeApi(
-      (o) async => o.path == '/pos/auth/refresh'
+      (o) async => o.path == '/mobi/auth/refresh'
           ? jsonBody(200, {'ok': true, ...fresh.toJson()})
           : jsonBody(401, {'detail': 'нет доступа'}),
       auth: interceptor,
     );
 
     await expectLater(
-      t.client.get('/pos/terminal'),
+      t.client.get('/mobi/terminal'),
       throwsA(
         isA<ApiException>().having((e) => e.statusCode, 'statusCode', 401),
       ),
@@ -158,7 +158,7 @@ void main() {
     final t = api();
 
     await expectLater(
-      t.client.get('/pos/terminal'),
+      t.client.get('/mobi/terminal'),
       throwsA(
         isA<ApiException>().having((e) => e.kind, 'kind', ApiErrorKind.network),
       ),
@@ -171,7 +171,7 @@ void main() {
     final t = api();
 
     await expectLater(
-      t.client.post('/pos/otp/verify', body: {'code': '1'}),
+      t.client.post('/mobi/otp/verify', body: {'code': '1'}),
       throwsA(isA<ApiException>()),
     );
     expect(backend.refreshCalls, 0);
@@ -182,7 +182,7 @@ void main() {
     final t = api();
 
     await expectLater(
-      t.client.get('/pos/terminal'),
+      t.client.get('/mobi/terminal'),
       throwsA(isA<ApiException>()),
     );
     expect(t.adapter.last!.headers.containsKey('Authorization'), isFalse);

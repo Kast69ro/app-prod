@@ -7,7 +7,7 @@ import 'auth_tokens.dart';
 
 /// Авторизация запросов: `Authorization: Bearer <access>` и refresh по 401.
 ///
-/// 401 на запросе данных → один `POST /pos/auth/refresh` → повтор запроса
+/// 401 на запросе данных → один `POST /mobi/auth/refresh` → повтор запроса
 /// с новым access. Если 401 пришёл и на refresh — токены мертвы,
 /// вызываем [onExpired] (выход на вход по SMS).
 ///

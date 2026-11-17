@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../payment/domain/payment.dart';
 
-/// Данные точки из `GET /pos/terminal`.
+/// Данные точки из `GET /mobi/terminal`.
 @immutable
 class TerminalInfo {
   const TerminalInfo({
@@ -37,7 +37,7 @@ class Totals {
   int get hashCode => Object.hash(count, amount);
 }
 
-/// Сводка за день из `GET /pos/summary`. Считает бэк, фронт не суммирует.
+/// Сводка за день из `GET /mobi/summary`. Считает бэк, фронт не суммирует.
 @immutable
 class DaySummary {
   const DaySummary({

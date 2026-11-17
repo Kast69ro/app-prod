@@ -19,7 +19,7 @@ abstract class TerminalDto with _$TerminalDto {
       _$TerminalDtoFromJson(json);
 }
 
-/// Ответ `GET /pos/terminal`.
+/// Ответ `GET /mobi/terminal`.
 @freezed
 abstract class TerminalResponseDto with _$TerminalResponseDto {
   const factory TerminalResponseDto({
@@ -54,7 +54,7 @@ abstract class TotalsDto with _$TotalsDto {
   Totals toDomain() => Totals(count: count, amount: amount.toDouble());
 }
 
-/// Ответ `GET /pos/summary`.
+/// Ответ `GET /mobi/summary`.
 @freezed
 abstract class SummaryDto with _$SummaryDto {
   const factory SummaryDto({

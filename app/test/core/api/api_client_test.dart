@@ -12,7 +12,7 @@ void main() {
     );
 
     final res = await t.client.get(
-      '/pos/summary',
+      '/mobi/summary',
       query: {'date': '2026-09-08'},
     );
 
@@ -27,7 +27,7 @@ void main() {
       tokens: testTokens,
     );
 
-    await t.client.post('/pos/otp/request', body: {'phone': '+992931234567'});
+    await t.client.post('/mobi/otp/request', body: {'phone': '+992931234567'});
 
     expect(t.adapter.last!.queryParameters, isEmpty);
     expect(t.adapter.last!.headers.containsKey('Authorization'), isFalse);
@@ -36,7 +36,7 @@ void main() {
   test('null-параметры не уходят в запрос', () async {
     final t = fakeApi((_) async => jsonBody(200, {}));
 
-    await t.client.get('/pos/history', query: {'date': null, 'limit': 50});
+    await t.client.get('/mobi/history', query: {'date': null, 'limit': 50});
 
     expect(t.adapter.last!.queryParameters, {'limit': 50});
   });
@@ -47,7 +47,7 @@ void main() {
     );
 
     await expectLater(
-      t.client.post('/pos/otp/verify'),
+      t.client.post('/mobi/otp/verify'),
       throwsA(
         isA<ApiException>()
             .having((e) => e.kind, 'kind', ApiErrorKind.http)
@@ -67,7 +67,7 @@ void main() {
     );
 
     await expectLater(
-      t.client.post('/pos/otp/verify'),
+      t.client.post('/mobi/otp/verify'),
       throwsA(isA<ApiException>().having((e) => e.detail, 'detail', isNull)),
     );
   });
@@ -81,7 +81,7 @@ void main() {
     );
 
     await expectLater(
-      t.client.get('/pos/terminal'),
+      t.client.get('/mobi/terminal'),
       throwsA(
         isA<ApiException>()
             .having((e) => e.kind, 'kind', ApiErrorKind.network)
@@ -99,7 +99,7 @@ void main() {
     );
 
     await expectLater(
-      t.client.get('/pos/terminal'),
+      t.client.get('/mobi/terminal'),
       throwsA(
         isA<ApiException>().having((e) => e.kind, 'kind', ApiErrorKind.timeout),
       ),
@@ -110,7 +110,7 @@ void main() {
     final t = fakeApi((_) async => jsonBody(200, [1, 2, 3]));
 
     await expectLater(
-      t.client.get('/pos/terminal'),
+      t.client.get('/mobi/terminal'),
       throwsA(
         isA<ApiException>().having(
           (e) => e.kind,
@@ -125,7 +125,7 @@ void main() {
     final t = fakeApi((_) async => jsonBody(200, {}), baseUrl: '');
 
     await expectLater(
-      t.client.get('/pos/terminal'),
+      t.client.get('/mobi/terminal'),
       throwsA(
         isA<ApiException>().having(
           (e) => e.kind,

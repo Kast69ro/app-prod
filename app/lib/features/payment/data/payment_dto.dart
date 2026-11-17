@@ -5,7 +5,7 @@ import '../domain/payment.dart';
 part 'payment_dto.freezed.dart';
 part 'payment_dto.g.dart';
 
-/// Платёж из `/pos/terminal` (`last_payment`) и `/pos/history` (`payments`).
+/// Платёж из `/mobi/terminal` (`last_payment`) и `/mobi/history` (`payments`).
 @freezed
 abstract class PaymentDto with _$PaymentDto {
   const factory PaymentDto({

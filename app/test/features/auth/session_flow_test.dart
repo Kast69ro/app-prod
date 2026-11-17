@@ -33,7 +33,7 @@ void main() {
         apiClientProvider.overrideWith(
           (ref) => fakeApi((o) async {
             requests.add(o);
-            return o.path == '/pos/auth/logout'
+            return o.path == '/mobi/auth/logout'
                 ? jsonBody(200, {'ok': true})
                 : jsonBody(401, {'detail': 'Токен истёк'});
           }, auth: (dio) => authInterceptorFor(ref, dio)).client,
@@ -132,7 +132,7 @@ void main() {
     expect(store.values, isEmpty);
     // refresh отозван на бэке.
     await pumpEventQueue();
-    expect(requests.single.path, '/pos/auth/logout');
+    expect(requests.single.path, '/mobi/auth/logout');
     expect(requests.single.data, {'refresh_token': 'refresh-1'});
   });
 
@@ -147,14 +147,14 @@ void main() {
     expect(s.reason, isNull);
     expect(store.values, isEmpty);
     expect(c.read(authCredentialsProvider), isNull);
-    expect(requests.single.path, '/pos/auth/logout');
+    expect(requests.single.path, '/mobi/auth/logout');
   });
 
   test('refresh отклонён → выход с причиной «сессия истекла»', () async {
     final c = await signedIn();
 
     await expectLater(
-      c.read(apiClientProvider).get('/pos/terminal'),
+      c.read(apiClientProvider).get('/mobi/terminal'),
       throwsA(anything),
     );
     await pumpEventQueue();
@@ -164,7 +164,10 @@ void main() {
     expect(s.reason, SignOutReason.sessionExpired);
     expect(store.values, isEmpty);
     // Мёртвый refresh не отзываем — бэк его уже отклонил.
-    expect(requests.map((r) => r.path), ['/pos/terminal', '/pos/auth/refresh']);
+    expect(requests.map((r) => r.path), [
+      '/mobi/terminal',
+      '/mobi/auth/refresh',
+    ]);
     expect(requests.first.headers['Authorization'], 'Bearer access-1');
   });
 

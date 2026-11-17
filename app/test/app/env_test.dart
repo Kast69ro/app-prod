@@ -11,11 +11,11 @@ void main() {
   test('dev: тестовый сервер', () {
     expect(
       url(Env.dev, ApiPaths.otpRequest),
-      'http://10.64.20.101:8888/pos/otp/request',
+      'http://10.64.20.101:8888/mobi/otp/request',
     );
     expect(
       url(Env.dev, ApiPaths.history),
-      'http://10.64.20.101:8888/pos/history',
+      'http://10.64.20.101:8888/mobi/history',
     );
   });
 
@@ -23,23 +23,23 @@ void main() {
     expect(Env.prod.apiBaseUrl, startsWith('https://'));
     expect(
       url(Env.prod, ApiPaths.otpRequest),
-      'https://qr.activ24.tj:4477/pos/otp/request',
+      'https://qr.activ24.tj:4477/mobi/otp/request',
     );
     expect(
       url(Env.prod, ApiPaths.otpVerify),
-      'https://qr.activ24.tj:4477/pos/otp/verify',
+      'https://qr.activ24.tj:4477/mobi/otp/verify',
     );
     expect(
       url(Env.prod, ApiPaths.terminal),
-      'https://qr.activ24.tj:4477/pos/terminal',
+      'https://qr.activ24.tj:4477/mobi/terminal',
     );
     expect(
       url(Env.prod, ApiPaths.summary),
-      'https://qr.activ24.tj:4477/pos/summary',
+      'https://qr.activ24.tj:4477/mobi/summary',
     );
     expect(
       url(Env.prod, ApiPaths.history),
-      'https://qr.activ24.tj:4477/pos/history',
+      'https://qr.activ24.tj:4477/mobi/history',
     );
   });
 }

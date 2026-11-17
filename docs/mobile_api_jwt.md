@@ -6,17 +6,17 @@
 
 ## Что изменилось против версии с `?phone=`
 - **Эндпоинты данных больше НЕ принимают `?phone=`.** `terminalId` берётся из токена.
-- **`/pos/otp/verify` теперь возвращает токены** (access + refresh), а не плоские поля.
-- Новые эндпоинты: `/pos/auth/refresh`, `/pos/auth/logout`.
+- **`/mobi/otp/verify` теперь возвращает токены** (access + refresh), а не плоские поля.
+- Новые эндпоинты: `/mobi/auth/refresh`, `/mobi/auth/logout`.
 - На всех эндпоинтах данных обязателен заголовок `Authorization: Bearer <access_token>`.
 
 ## Флоу
-1. `POST /pos/otp/request` `{phone}` → приходит SMS с кодом.
-2. `POST /pos/otp/verify` `{phone, code}` → `access_token` + `refresh_token`.
+1. `POST /mobi/otp/request` `{phone}` → приходит SMS с кодом.
+2. `POST /mobi/otp/verify` `{phone, code}` → `access_token` + `refresh_token`.
 3. Все запросы данных — с заголовком `Authorization: Bearer <access_token>`.
-4. Пришёл `401` (access истёк) → `POST /pos/auth/refresh` `{refresh_token}` → новая пара токенов, повтори запрос.
+4. Пришёл `401` (access истёк) → `POST /mobi/auth/refresh` `{refresh_token}` → новая пара токенов, повтори запрос.
 5. Если и refresh вернул `401` → токены мертвы → заново OTP-логин.
-6. Выход: `POST /pos/auth/logout` `{refresh_token}`.
+6. Выход: `POST /mobi/auth/logout` `{refresh_token}`.
 
 Access живёт ~15 мин, refresh ~30 дней. Токены хранить в защищённом хранилище
 (Keychain / Keystore), в логи не писать.
@@ -25,7 +25,7 @@ Access живёт ~15 мин, refresh ~30 дней. Токены хранить 
 
 ## Авторизация
 
-### POST /pos/otp/request  (без токена)
+### POST /mobi/otp/request  (без токена)
 `{ "phone": "+992970799797" }`
 
 Телефон — с `+`. Это POST/JSON, `+` кодировать не нужно.
@@ -37,7 +37,7 @@ Access живёт ~15 мин, refresh ~30 дней. Токены хранить 
 | 403 | терминал не наш мерчант |
 | 429 | слишком рано/слишком много (в `Retry-After` — секунды) |
 
-### POST /pos/otp/verify  (без токена)
+### POST /mobi/otp/verify  (без токена)
 `{ "phone": "+992970799797", "code": "123456" }`
 
 Успех `200`:
@@ -57,7 +57,7 @@ Access живёт ~15 мин, refresh ~30 дней. Токены хранить 
 ```
 `400` — код не запрашивался/истёк/неверный (в `detail` — остаток попыток).
 
-### POST /pos/auth/refresh  (без токена, refresh в теле)
+### POST /mobi/auth/refresh  (без токена, refresh в теле)
 `{ "refresh_token": "xzy..." }` →
 ```json
 { "ok": true, "access_token": "eyJ...", "access_expires_in": 900,
@@ -66,19 +66,19 @@ Access живёт ~15 мин, refresh ~30 дней. Токены хранить 
 `401` — refresh недействителен/истёк → заново OTP-логин.
 Важно: **refresh ротируется** — после рефреша старый refresh больше не работает, храни новый.
 
-### POST /pos/auth/logout
+### POST /mobi/auth/logout
 `{ "refresh_token": "xzy..." }` → `{ "ok": true, "message": "Выход выполнен" }`
 
 ---
 
 ## Данные (все — с `Authorization: Bearer <access_token>`)
 
-### GET /pos/terminal
+### GET /mobi/terminal
 ```json
 { "terminal": { ... }, "last_payment": { ...объект платежа... } | null }
 ```
 
-### GET /pos/summary?date=ГГГГ-ММ-ДД
+### GET /mobi/summary?date=ГГГГ-ММ-ДД
 `date` необязателен (по умолчанию сегодня).
 ```json
 { "date": "2026-11-09",
@@ -87,7 +87,7 @@ Access живёт ~15 мин, refresh ~30 дней. Токены хранить 
   "currency": "TJS" }
 ```
 
-### GET /pos/history
+### GET /mobi/history
 Параметры: `date` (один день) ИЛИ `from`/`to` (период, включительно);
 `limit` (1..200, по умолч. 50), `offset` (для подгрузки).
 ```json
@@ -96,7 +96,7 @@ Access живёт ~15 мин, refresh ~30 дней. Токены хранить 
 ```
 Подгрузка: `offset += limit`.
 
-### GET /pos/report?date=ГГГГ-ММ-ДД
+### GET /mobi/report?date=ГГГГ-ММ-ДД
 Ответ — файл `.xlsx` (`Content-Disposition: attachment`). Отдать в системное
 «Поделиться».
 
@@ -121,7 +121,7 @@ Access живёт ~15 мин, refresh ~30 дней. Токены хранить 
 
 ## Обработка 401 (важно)
 На любом запросе данных `401` означает «access истёк/недействителен». Алгоритм:
-1. вызвать `/pos/auth/refresh` с текущим refresh;
+1. вызвать `/mobi/auth/refresh` с текущим refresh;
 2. успех → сохранить новую пару, повторить исходный запрос;
 3. `401` на refresh → очистить токены, отправить на экран OTP-логина.
 Не зацикливать: один refresh на один `401`.

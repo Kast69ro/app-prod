@@ -47,17 +47,17 @@ lib/
 ## Flavors
 - `dev`: `http://10.64.20.101:8888` (тестовый, внутренняя сеть банка). http разрешён ТОЛЬКО в dev:
   Android `src/dev/res/xml/network_security_config.xml`, iOS — исключение ATS только в dev-конфигурации.
-- `prod`: `https://qr.activ24.tj:4477` (шлюз, ручки тоже под `/pos`). Без исключений ATS / cleartext, включён certificate pinning.
+- `prod`: `https://qr.activ24.tj:4477` (шлюз, ручки тоже под `/mobi`). Без исключений ATS / cleartext, включён certificate pinning.
 - Адрес берётся из `env.dart`, нигде не хардкодится.
 
-## API (база `/pos`)
-- `POST /pos/otp/request` `{phone}` → `{ok, message, expires_in}`. Ошибки: 404 не найден, 403 не наш мерчант, 429 повтор позже (`detail`).
-- `POST /pos/otp/verify` `{phone, code}` → `{ok, access_token, refresh_token, terminal: {terminalId, terminalName, storeName, terminalQR}}`. Ошибки: 400 (в `detail` «Осталось попыток: N»), 429.
-- `GET /pos/terminal` → `{terminal: {terminalName, terminalPhone, storeName, terminalQR}, last_payment | null}`.
-- `GET /pos/summary?date=YYYY-MM-DD` → `{date, success: {count, amount}, cancel: {count, amount}, currency}`; позже блок `refunded`.
-- `GET /pos/history?date=|from=&to=&limit=50&offset=0` → `{total, limit, offset, count, payments: [{sender, sender_bank_id, amount, status, creation_datetime}]}`, от новых к старым.
+## API (база `/mobi`)
+- `POST /mobi/otp/request` `{phone}` → `{ok, message, expires_in}`. Ошибки: 404 не найден, 403 не наш мерчант, 429 повтор позже (`detail`).
+- `POST /mobi/otp/verify` `{phone, code}` → `{ok, access_token, refresh_token, terminal: {terminalId, terminalName, storeName, terminalQR}}`. Ошибки: 400 (в `detail` «Осталось попыток: N»), 429.
+- `GET /mobi/terminal` → `{terminal: {terminalName, terminalPhone, storeName, terminalQR}, last_payment | null}`.
+- `GET /mobi/summary?date=YYYY-MM-DD` → `{date, success: {count, amount}, cancel: {count, amount}, currency}`; позже блок `refunded`.
+- `GET /mobi/history?date=|from=&to=&limit=50&offset=0` → `{total, limit, offset, count, payments: [{sender, sender_bank_id, amount, status, creation_datetime}]}`, от новых к старым.
 - Статусы: `success` «Оплачено», `cancel` «Отклонён»; позже `refunded` «Возврат», `refund_pending` «Возврат в обработке».
-- Авторизация — JWT (контракт: `docs/mobile_api_jwt.md`). `otp/verify` отдаёт `access_token` + `refresh_token` и `terminal {…}`; ручки данных — только с `Authorization: Bearer`, `?phone=` больше нет. 401 → один `POST /pos/auth/refresh` (refresh ротируется) → повтор; 401 на refresh → выход на OTP. Выход — `POST /pos/auth/logout`. Всё это — в `AuthInterceptor`, экраны и репозитории про токены не знают.
+- Авторизация — JWT (контракт: `docs/mobile_api_jwt.md`). `otp/verify` отдаёт `access_token` + `refresh_token` и `terminal {…}`; ручки данных — только с `Authorization: Bearer`, `?phone=` больше нет. 401 → один `POST /mobi/auth/refresh` (refresh ротируется) → повтор; 401 на refresh → выход на OTP. Выход — `POST /mobi/auth/logout`. Всё это — в `AuthInterceptor`, экраны и репозитории про токены не знают.
 - Ошибки показываем по тексту `detail` с бэка; нет сети / таймаут → понятный экран с кнопкой «Повторить».
 
 ## Экраны
@@ -73,7 +73,6 @@ lib/
 - Токены и сессия — только `flutter_secure_storage`. Не хранить PIN или его простой хеш.
 - Не логировать телефон, коды, токены, ответы API. В релизе логов запросов нет.
 - Автоблокировка при сворачивании/бездействии → снова код.
-- Скрывать содержимое в списке недавних (Android `FLAG_SECURE`, iOS — заглушка).
 - Релиз: `--obfuscate --split-debug-info`.
 - Никаких ключей, паролей, keystore в репозитории.
 

@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'auth_dtos.freezed.dart';
 part 'auth_dtos.g.dart';
 
-/// Ответ `POST /pos/otp/request`.
+/// Ответ `POST /mobi/otp/request`.
 @freezed
 abstract class OtpRequestDto with _$OtpRequestDto {
   const factory OtpRequestDto({
@@ -16,7 +16,7 @@ abstract class OtpRequestDto with _$OtpRequestDto {
       _$OtpRequestDtoFromJson(json);
 }
 
-/// Терминал из ответа `POST /pos/otp/verify`.
+/// Терминал из ответа `POST /mobi/otp/verify`.
 @freezed
 abstract class VerifiedTerminalDto with _$VerifiedTerminalDto {
   const factory VerifiedTerminalDto({
@@ -30,7 +30,7 @@ abstract class VerifiedTerminalDto with _$VerifiedTerminalDto {
       _$VerifiedTerminalDtoFromJson(json);
 }
 
-/// Ответ `POST /pos/otp/verify` без токенов: их разбирает `AuthTokens`,
+/// Ответ `POST /mobi/otp/verify` без токенов: их разбирает `AuthTokens`,
 /// чтобы токены не попали в сгенерированный `toString`.
 @freezed
 abstract class OtpVerifyDto with _$OtpVerifyDto {

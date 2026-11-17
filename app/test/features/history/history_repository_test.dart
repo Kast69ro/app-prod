@@ -37,7 +37,7 @@ void main() {
 
       final page = await HistoryRepository(t.client).getPage(offset: 50);
 
-      expect(t.adapter.last!.path, '/pos/history');
+      expect(t.adapter.last!.path, '/mobi/history');
       expect(t.adapter.last!.queryParameters, {'limit': 50, 'offset': 50});
       expect(page.total, 137);
       expect(page.offset, 50);

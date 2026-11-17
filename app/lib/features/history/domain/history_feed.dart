@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../../../core/utils/date_format.dart';
 import '../../payment/domain/payment.dart';
 
-/// Одна страница `GET /pos/history`.
+/// Одна страница `GET /mobi/history`.
 @immutable
 class HistoryPage {
   const HistoryPage({

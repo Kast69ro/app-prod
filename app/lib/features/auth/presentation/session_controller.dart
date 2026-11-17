@@ -142,7 +142,7 @@ class SessionController extends _$SessionController {
   /// «Выйти» в настройках и на экране кода.
   Future<void> signOut() => _signOut();
 
-  /// [revoke] — отозвать refresh на бэке (`/pos/auth/logout`).
+  /// [revoke] — отозвать refresh на бэке (`/mobi/auth/logout`).
   /// Не нужно, если бэк сам его уже отклонил.
   Future<void> _signOut({SignOutReason? reason, bool revoke = true}) async {
     final current = state.value;

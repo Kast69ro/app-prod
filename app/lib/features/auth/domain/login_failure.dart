@@ -19,7 +19,7 @@ class LoginFailure {
   final LoginFailureKind kind;
   final String? detail;
 
-  /// Ошибка `POST /pos/otp/request`.
+  /// Ошибка `POST /mobi/otp/request`.
   factory LoginFailure.fromRequest(ApiException e) => switch (e) {
     ApiException(statusCode: 404) => const LoginFailure(
       LoginFailureKind.terminalNotFound,
@@ -34,7 +34,7 @@ class LoginFailure {
     _ => _common(e),
   };
 
-  /// Ошибка `POST /pos/otp/verify`.
+  /// Ошибка `POST /mobi/otp/verify`.
   factory LoginFailure.fromVerify(ApiException e) => switch (e) {
     ApiException(statusCode: 429) => LoginFailure(
       LoginFailureKind.otpTooManyAttempts,

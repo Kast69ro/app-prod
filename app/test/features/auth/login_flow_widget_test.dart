@@ -48,7 +48,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
     await tester.pumpAndSettle();
 
-    expect(backend.requests, contains('/pos/otp/verify'));
+    expect(backend.requests, contains('/mobi/otp/verify'));
     expect(find.text('Создайте код входа'), findsOneWidget);
   });
 
@@ -65,7 +65,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(sms.cancels, 1);
     expect(sms.listening, isFalse);
-    expect(backend.requests, isNot(contains('/pos/otp/verify')));
+    expect(backend.requests, isNot(contains('/mobi/otp/verify')));
     expect(find.text('Вход для мерчантов'), findsOneWidget);
   });
 

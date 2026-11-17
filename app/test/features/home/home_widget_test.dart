@@ -26,10 +26,10 @@ void main() {
     expect(find.text('Душанбе Сити Банк · 14:12'), findsOneWidget);
 
     // Телефон уходит в GET-запросы после входа.
-    expect(backend.requests, containsAll(['/pos/terminal', '/pos/summary']));
+    expect(backend.requests, containsAll(['/mobi/terminal', '/mobi/summary']));
     // Ручки данных — с токеном из otp/verify, ручки входа — без него.
     for (var i = 0; i < backend.requests.length; i++) {
-      final isAuth = backend.requests[i].startsWith('/pos/otp/');
+      final isAuth = backend.requests[i].startsWith('/mobi/otp/');
       expect(backend.authHeaders[i], isAuth ? isNull : 'Bearer access-1');
     }
   });

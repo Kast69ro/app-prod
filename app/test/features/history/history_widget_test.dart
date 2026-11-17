@@ -138,7 +138,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.textContaining('Показать ещё'), findsNothing);
-    final history = backend.requests.where((r) => r == '/pos/history');
+    final history = backend.requests.where((r) => r == '/mobi/history');
     expect(history, hasLength(2));
   });
 

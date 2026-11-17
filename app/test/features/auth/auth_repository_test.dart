@@ -25,7 +25,7 @@ void main() {
       final expires = await AuthRepository(t.client).requestOtp('931234567');
 
       expect(expires, 180);
-      expect(t.adapter.last!.path, '/pos/otp/request');
+      expect(t.adapter.last!.path, '/mobi/otp/request');
       expect(t.adapter.last!.data, {'phone': '+992931234567'});
     });
 
@@ -113,7 +113,7 @@ void main() {
 
       await AuthRepository(t.client).logout('refresh-1');
 
-      expect(t.adapter.last!.path, '/pos/auth/logout');
+      expect(t.adapter.last!.path, '/mobi/auth/logout');
       expect(t.adapter.last!.data, {'refresh_token': 'refresh-1'});
       expect(t.adapter.last!.headers.containsKey('Authorization'), isFalse);
     });

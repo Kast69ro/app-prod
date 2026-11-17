@@ -6,7 +6,7 @@ import '../domain/history_feed.dart';
 part 'history_dtos.freezed.dart';
 part 'history_dtos.g.dart';
 
-/// Ответ `GET /pos/history`. Блок `terminal` здесь не нужен — его берёт главная.
+/// Ответ `GET /mobi/history`. Блок `terminal` здесь не нужен — его берёт главная.
 @freezed
 abstract class HistoryPageDto with _$HistoryPageDto {
   const factory HistoryPageDto({

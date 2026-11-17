@@ -24,11 +24,11 @@ class FakeBackend {
   bool terminalFails = false;
   bool historyFails = false;
 
-  /// Платежи для `/pos/history`, от новых к старым. Отдаются постранично.
+  /// Платежи для `/mobi/history`, от новых к старым. Отдаются постранично.
   List<Map<String, Object?>> history = [];
   final requests = <String>[];
 
-  /// Параметры запросов `/pos/history` — проверять фильтр периода.
+  /// Параметры запросов `/mobi/history` — проверять фильтр периода.
   final historyQueries = <Map<String, dynamic>>[];
 
   /// Заголовки `Authorization` по порядку запросов (`null` — без него).
@@ -37,11 +37,11 @@ class FakeBackend {
   Future<ResponseBody> respond(RequestOptions o) async {
     requests.add(o.path);
     authHeaders.add(o.headers['Authorization']);
-    if (o.path == '/pos/history') historyQueries.add(o.queryParameters);
+    if (o.path == '/mobi/history') historyQueries.add(o.queryParameters);
     switch (o.path) {
-      case '/pos/otp/request':
+      case '/mobi/otp/request':
         return jsonBody(200, {'ok': true, 'expires_in': 300});
-      case '/pos/otp/verify':
+      case '/mobi/otp/verify':
         if (verifyStatus != 200) {
           return jsonBody(verifyStatus, {'detail': 'Осталось попыток: 4'});
         }
@@ -57,11 +57,11 @@ class FakeBackend {
             'storeName': 'ООО Ромашка',
           },
         });
-      case '/pos/auth/refresh':
+      case '/mobi/auth/refresh':
         return jsonBody(401, {'detail': 'Refresh недействителен'});
-      case '/pos/auth/logout':
+      case '/mobi/auth/logout':
         return jsonBody(200, {'ok': true});
-      case '/pos/terminal':
+      case '/mobi/terminal':
         if (terminalFails) {
           throw DioException.connectionError(requestOptions: o, reason: 'x');
         }
@@ -79,12 +79,12 @@ class FakeBackend {
             'creation_datetime': '2026-09-08T14:12:00',
           },
         });
-      case '/pos/summary':
+      case '/mobi/summary':
         return jsonBody(200, {
           'success': {'count': 21, 'amount': 795},
           'cancel': {'count': 2, 'amount': 60},
         });
-      case '/pos/history':
+      case '/mobi/history':
         if (historyFails) {
           throw DioException.connectionError(requestOptions: o, reason: 'x');
         }
