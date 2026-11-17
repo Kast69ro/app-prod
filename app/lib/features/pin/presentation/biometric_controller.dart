@@ -72,13 +72,17 @@ class BiometricController extends _$BiometricController {
 }
 
 /// Тексты системного окна. [cancel] — «Ввести код» на входе,
-/// «Отмена» при включении.
-BiometricPrompt biometricPrompt(AppLocalizations l, {required String cancel}) =>
-    BiometricPrompt(
-      reason: l.biometricReason,
-      title: l.appTitle,
-      cancel: cancel,
-    );
+/// «Отмена» при включении. [fallback] — см. [BiometricPrompt.fallback].
+BiometricPrompt biometricPrompt(
+  AppLocalizations l, {
+  required String cancel,
+  String? fallback,
+}) => BiometricPrompt(
+  reason: l.biometricReason,
+  title: l.appTitle,
+  cancel: cancel,
+  fallback: fallback,
+);
 
 /// «Face ID» / «отпечатку» — в подписи кнопки и настроек.
 extension BiometricLabels on AppLocalizations {

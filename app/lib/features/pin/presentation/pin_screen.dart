@@ -23,15 +23,46 @@ class PinScreen extends ConsumerStatefulWidget {
 }
 
 class _PinScreenState extends ConsumerState<PinScreen> {
+  late final AppLifecycleListener _lifecycle;
+
+  /// Открыть системное окно, как только приложение станет активным.
+  bool _promptPending = false;
+
   @override
   void initState() {
     super.initState();
+    _lifecycle = AppLifecycleListener(
+      // Вернулись из фона на экран кода — снова предложить Face ID.
+      // Именно onShow, а не onResume: закрытие окна Face ID на iOS тоже
+      // даёт onResume, и окно открывалось бы по кругу.
+      onShow: () => _promptPending = true,
+      onResume: _promptIfPending,
+    );
     // Системное окно — сразу, как только экран кода показался.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && ref.read(pinControllerProvider).stage == PinStage.unlock) {
-        _biometricUnlock();
+      _promptPending = true;
+      final state = WidgetsBinding.instance.lifecycleState;
+      // Экран может появиться ещё до того, как приложение стало активным
+      // (блокировка при возврате из фона). iOS в этот момент окно Face ID
+      // не показывает — ждём onResume.
+      if (state == null || state == AppLifecycleState.resumed) {
+        _promptIfPending();
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _lifecycle.dispose();
+    super.dispose();
+  }
+
+  void _promptIfPending() {
+    if (!_promptPending || !mounted) return;
+    _promptPending = false;
+    if (ref.read(pinControllerProvider).stage == PinStage.unlock) {
+      _biometricUnlock();
+    }
   }
 
   /// Не прошло или отменили — ничего не показываем: человек вводит код.
@@ -39,7 +70,13 @@ class _PinScreenState extends ConsumerState<PinScreen> {
     final l = AppLocalizations.of(context);
     await ref
         .read(biometricControllerProvider.notifier)
-        .unlock(biometricPrompt(l, cancel: l.biometricUseCode));
+        .unlock(
+          biometricPrompt(
+            l,
+            cancel: l.biometricUseCode,
+            fallback: l.biometricUseCode,
+          ),
+        );
   }
 
   @override

@@ -16,6 +16,7 @@ class BiometricPrompt {
     required this.reason,
     required this.title,
     required this.cancel,
+    this.fallback,
   });
 
   /// iOS — подпись под Face ID, Android — строка в окне.
@@ -26,6 +27,12 @@ class BiometricPrompt {
 
   /// Кнопка «отказаться» — дальше вход по коду.
   final String cancel;
+
+  /// iOS: кнопка, которую система показывает после неудачной попытки
+  /// Face ID. По умолчанию там «Ввести пароль» (пароль телефона), а у нас
+  /// biometricOnly — нажатие просто закрывает окно. Поэтому подписываем
+  /// её «Ввести код» или прячем (`null`).
+  final String? fallback;
 }
 
 /// Системная проверка Face ID / отпечатка. Приложение получает только
@@ -73,15 +80,24 @@ class LocalBiometricAuth implements BiometricAuth {
         localizedReason: prompt.reason,
         // Только биометрия: пароль телефона — не замена коду приложения.
         biometricOnly: true,
-        // Звонок посреди проверки — продолжить после возврата.
-        persistAcrossBackgrounding: true,
+        // Свернули посреди проверки — окно закрывается, а не всплывает
+        // само при возврате: на Android плагин в этом режиме иногда
+        // показывает окно второй раз. Повторный запрос делает экран кода.
+        persistAcrossBackgrounding: false,
+        // Иначе на Android после распознавания лица нужно ещё нажать
+        // «Подтвердить».
+        sensitiveTransaction: false,
         authMessages: [
           AndroidAuthMessages(
             signInTitle: prompt.title,
             signInHint: '',
             cancelButton: prompt.cancel,
           ),
-          IOSAuthMessages(cancelButton: prompt.cancel),
+          IOSAuthMessages(
+            cancelButton: prompt.cancel,
+            // Пустая строка — iOS прячет кнопку.
+            localizedFallbackTitle: prompt.fallback ?? '',
+          ),
         ],
       );
     } on LocalAuthException {

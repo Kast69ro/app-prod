@@ -1,5 +1,6 @@
 import 'package:activbank_qr/core/security/biometric_auth.dart';
 import 'package:activbank_qr/core/storage/secure_store.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/test_app.dart';
@@ -82,6 +83,65 @@ void main() {
     expect(find.text(home), findsOneWidget);
     expect(bio.prompts, 2);
     expect(bio.lastPrompt!.cancel, 'Ввести код');
+    expect(bio.lastPrompt!.fallback, 'Ввести код');
+  });
+
+  /// Свернуть и развернуть приложение.
+  Future<void> background(WidgetTester tester) async {
+    for (final s in [
+      AppLifecycleState.inactive,
+      AppLifecycleState.hidden,
+      AppLifecycleState.paused,
+      AppLifecycleState.hidden,
+      AppLifecycleState.inactive,
+      AppLifecycleState.resumed,
+    ]) {
+      tester.binding.handleAppLifecycleStateChanged(s);
+    }
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('экран кода: вернулись из фона — окно Face ID снова', (
+    tester,
+  ) async {
+    final bio = FakeBiometricAuth(kind: BiometricKind.face);
+    final store = await signInAnswering(tester, bio, enable: true);
+    bio.succeeds = false;
+    await pumpTestApp(
+      tester,
+      FakeBackend(),
+      store: store,
+      biometrics: bio,
+      size: phoneSize,
+    );
+    final before = bio.prompts;
+
+    bio.succeeds = true;
+    await background(tester);
+    expect(bio.prompts, before + 1);
+    expect(find.text(home), findsOneWidget);
+  });
+
+  testWidgets('закрыли окно Face ID (inactive → resumed) — не открывается '
+      'по кругу', (tester) async {
+    final bio = FakeBiometricAuth(kind: BiometricKind.face);
+    final store = await signInAnswering(tester, bio, enable: true);
+    bio.succeeds = false;
+    await pumpTestApp(
+      tester,
+      FakeBackend(),
+      store: store,
+      biometrics: bio,
+      size: phoneSize,
+    );
+    final before = bio.prompts;
+
+    // Так iOS сообщает о закрытии системного окна.
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pumpAndSettle();
+    expect(bio.prompts, before);
+    expect(find.text('Код входа'), findsOneWidget);
   });
 
   testWidgets('отменили окно → код или кнопка «Войти по Face ID»', (
